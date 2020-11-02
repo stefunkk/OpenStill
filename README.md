@@ -10,6 +10,7 @@ Project for controlling still. Developed for ESP8266 (but should work for other 
 * Show if temperature is rising or dropping
 * Show ABV of vapour in head
 * Show amount of alcohol left in tank
+* Web server with information about temperatures, heater control and live charts
 
 ## Dependencies
 
@@ -19,6 +20,7 @@ Project for controlling still. Developed for ESP8266 (but should work for other 
 * [OneWire](https://github.com/PaulStoffregen/OneWire)
 * [DallasTemperature](https://github.com/milesburton/Arduino-Temperature-Control-Library)
 * [IoAbstraction](https://github.com/davetcc/IoAbstraction)
+* [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer/)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
