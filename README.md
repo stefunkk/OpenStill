@@ -22,3 +22,5 @@ Project for controlling still. Developed for ESP8266 (but should work for other 
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+![Screen shot](https://i.ibb.co/StTxN0J/termo.png)
