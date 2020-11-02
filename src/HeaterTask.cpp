@@ -1,13 +1,9 @@
 #include "HeaterTask.h"
 
-HeaterTaskClass::HeaterTaskClass(int relayPin, int powerResolution, int percentagePower, int heaterTimeFrameInSeconds):
-_lastState(LOW), _heaterTimeFrameInSeconds(heaterTimeFrameInSeconds), _percentagePower(percentagePower), _relayPin(relayPin),
-_waitTime(_heaterTimeFrameInSeconds * 1000)
+HeaterTaskClass::HeaterTaskClass(SettingsClass& settingsClass):
+	_settingsClass(settingsClass), _lastState(LOW)
 {
-	_relayPin = relayPin;
-	UpdateHeaterParameters(powerResolution, percentagePower, heaterTimeFrameInSeconds);
-
-	pinMode(_relayPin, OUTPUT);
+	pinMode(_settingsClass.relayPin, OUTPUT);
 }
 
 uint32_t HeaterTaskClass::timeOfNextCheck()
@@ -21,43 +17,43 @@ void HeaterTaskClass::exec()
 
 	Serial.println("HeaterTask");
 	
-	if (_percentagePower > 0 && _lastState == LOW)
+	if (_settingsClass.percentagePower > 0 && _lastState == LOW)
 	{
-		turnAndWait(_highTimeInMiliseconds, HIGH);
+		turnAndWait(getHighTime(), HIGH);
 		return;
 	}
 
-	if (_percentagePower < 100 && _lastState == HIGH)
+	if (_settingsClass.percentagePower < 100 && _lastState == HIGH)
 	{
-		turnAndWait(_lowTimeInMiliseconds, LOW);
+		turnAndWait(getLowTime(), LOW);
 		return;
 	}
 
-	if (_percentagePower == 100)
+	if (_settingsClass.percentagePower == 100)
 	{
-		turnAndWait(_heaterTimeFrameInSeconds * 1000, HIGH);
+		turnAndWait(_settingsClass.heaterTimeFrameInSeconds * 1000, HIGH);
 	}
 	
-	if (_percentagePower == 0)
+	if (_settingsClass.percentagePower == 0)
 	{
-		turnAndWait(_heaterTimeFrameInSeconds * 1000, LOW);
+		turnAndWait(_settingsClass.heaterTimeFrameInSeconds * 1000, LOW);
 	}
-}
-
-void HeaterTaskClass::UpdateHeaterParameters(int powerResolution, int percentagePower, int heaterTimeFrameInSeconds)
-{
-	_powerResolution = powerResolution;
-	_percentagePower = percentagePower;
-	_heaterTimeFrameInSeconds = heaterTimeFrameInSeconds;
-
-	_highTimeInMiliseconds = _percentagePower * _heaterTimeFrameInSeconds * 1000 / _powerResolution;
-	_lowTimeInMiliseconds = (_powerResolution - _percentagePower) * _heaterTimeFrameInSeconds * 1000 / _powerResolution;
 }
 
 void HeaterTaskClass::turnAndWait(int timeInMiliseconds, int state)
 {
-	digitalWrite(_relayPin, state);
+	digitalWrite(_settingsClass.relayPin, state);
 
 	_lastState = state;
 	_waitTime = timeInMiliseconds;
+}
+
+int HeaterTaskClass::getHighTime() 
+{
+	return _settingsClass.percentagePower * _settingsClass.heaterTimeFrameInSeconds * 1000 / _settingsClass.powerResolution;
+}
+
+int HeaterTaskClass::getLowTime() 
+{
+	return (_settingsClass.powerResolution - _settingsClass.percentagePower) * _settingsClass.heaterTimeFrameInSeconds * 1000 / _settingsClass.powerResolution;
 }

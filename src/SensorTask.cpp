@@ -1,8 +1,7 @@
 #include "SensorTask.h"
 
-SensorTaskClass::SensorTaskClass(int sensorPin, DallasTemperature& sensors, 
-	DeviceAddress (&addresses)[4], SensorDataClass& sensorData):
-	_sensorPin(sensorPin), _sensors(sensors), _addresses(addresses), _sensorData(sensorData)
+SensorTaskClass::SensorTaskClass(DallasTemperature& sensors, const DeviceAddress (&addresses)[4], SensorDataClass& sensorData):
+	 _sensors(sensors), _addresses(addresses), _sensorData(sensorData)
 {
 	_sensors.setResolution(12);
 	_sensors.begin();
@@ -19,10 +18,8 @@ uint32_t SensorTaskClass::timeOfNextCheck()
 
 void SensorTaskClass::exec()
 {
-
 	Serial.println("Sensor Task");
 	
-	auto counter = 0;
 	_sensors.requestTemperatures();
 
 	_sensorData.shelf10 = _sensors.getTempC(_addresses[0]);

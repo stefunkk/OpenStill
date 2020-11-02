@@ -3,10 +3,14 @@
 #include <IoAbstractionWire.h>
 #include <Wire.h>
 
-LiquidCrystalI2C_RS_EN(lcd, 0x3f, false)
+#define LCD_ROWS 4
+#define LCD_COLUMNS 20
+#define LCD_ADDRESS 0x3F
+
+LiquidCrystalI2C_RS_EN(lcd, LCD_ADDRESS, false)
 
 LcdServiceClass::LcdServiceClass(AlcoholCalculatorClass& alcoholCalculator,
-                                 char(&names)[4][5], float tankSize) :
+                                 const char(&names)[4][5], float tankSize) :
 	_lcd(*lcd), _alcoholCalculator(alcoholCalculator), _names(names), _temperatures{0, 0, 0, 0}
 {
 	_tankSize = tankSize;
@@ -15,7 +19,7 @@ LcdServiceClass::LcdServiceClass(AlcoholCalculatorClass& alcoholCalculator,
 	_lcd.configureBacklightPin(3);
 	_lcd.backlight();
 	Wire.begin();
-	_lcd.begin(20, 4);
+	_lcd.begin(LCD_COLUMNS, LCD_ROWS);
 	
 	_lcd.print("OpenStill");
 	createCustomCharacters();
