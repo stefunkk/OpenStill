@@ -14,9 +14,6 @@ uint32_t HeaterTaskClass::timeOfNextCheck()
 
 void HeaterTaskClass::exec()
 {
-
-	Serial.println("HeaterTask");
-	
 	if (_settingsClass.percentagePower > 0 && _lastState == LOW)
 	{
 		turnAndWait(getHighTime(), HIGH);

@@ -13,9 +13,6 @@ uint32_t LcdTaskClass::timeOfNextCheck()
 
 void LcdTaskClass::exec()
 {
-
-	Serial.println("Lcd Task");
-
 	_lcdService.printTemperatures(_sensorData);
 }
 

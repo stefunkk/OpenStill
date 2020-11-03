@@ -4,19 +4,23 @@
 
 #include <DallasTemperature.h>
 #include <TaskManagerIO.h>
+#include <OneWire.h>
 #include "SensorData.h"
+#include "StillDataContext.h"
 
 class SensorTaskClass : public BaseEvent
 {
 public:
-	SensorTaskClass(DallasTemperature& sensors, const DeviceAddress (&addresses)[4], SensorDataClass& sensorData);
+	SensorTaskClass(OneWire& oneWire, DallasTemperature& sensors, StillDataContextClass& context, SensorDataClass& sensorData);
 	void exec() override;
 	uint32_t timeOfNextCheck() override;
 private:
+	void FindSensors();
 	DallasTemperature& _sensors;
 	int _deviceCount;
-	const DeviceAddress (&_addresses)[4];
 	SensorDataClass& _sensorData;
+	OneWire& _oneWire;
+	StillDataContextClass& _context;
 };
 
 #endif

@@ -6,6 +6,14 @@
         .heater-input {
             margin-bottom: 10px;
         }
+
+        .configuration-container {
+            margin-top: 50px;
+        }
+
+        .configuration-container .form-control {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
@@ -83,7 +91,71 @@
         <div>
             <canvas id="myChart" width="400" height="200"></canvas>
         </div>
+
+        <div class="configuration-container container" id="config">
+            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#sensor"
+                aria-expanded="false" aria-controls="sensor" v-on:click="refreshSensors">
+                Termometry
+            </button>
+            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#zmienne"
+                aria-expanded="false" aria-controls="zmienne">
+                Inne
+            </button>
+            </p>
+
+            <div class="collapse" id="sensor" data-parent="#config">
+                <div class="card card-body">
+                    <div>
+                        <select v-model="shelv10Device" class="form-control form-control-lg">
+                            <option disabled value="">10 Półka</option>
+                            <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                {{ option.text }}
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <select v-model="headerDevice" class="form-control form-control-lg">
+                            <option disabled value="">Głowica</option>
+                            <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                {{ option.text }}
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <select v-model="tankDevice" class="form-control form-control-lg">
+                            <option disabled value="">Zbiornik</option>
+                            <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                {{ option.text }}
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <select v-model="waterDevice" class="form-control form-control-lg">
+                            <option disabled value="">Woda</option>
+                            <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                {{ option.text }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="">
+                        <input v-on:click="updateSensors" type="button" value="Ustaw"
+                            class="form-control heater-input btn btn-primary btn-lg btn-block" />
+                    </div>
+                </div>
+
+            </div>
+            </p>
+            <div class="collapse" id="zmienne" data-parent="#config">
+                <div class="card card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                    Nihil
+                    anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                </div>
+            </div>
+        </div>
+
     </div>
+
 
 
 
@@ -166,7 +238,13 @@
                 water: 0,
                 heater: 0,
                 setHeater: "",
-                lastReadTime: 0
+                lastReadTime: 0,
+                shelv10Device: "",
+                headerDevice: "",
+                tankDevice: "",
+                waterDevice: "",
+                sensorOptions: []
+
             },
             mounted: function () {
                 this.interval = setInterval(() => {
@@ -210,6 +288,8 @@
                             window.myLine.update();
                         })
                 }, 1000);
+
+                this.refreshSensors();
             },
             methods: {
                 updateHeater: function (event) {
@@ -219,6 +299,24 @@
                                 heater: this.setHeater
                             }
                         })
+                },
+                updateSensors: function (event) {
+                    axios
+                        .get('/set', {
+                            params: {
+                                shelv10Device: this.shelv10Device,
+                                headerDevice: this.headerDevice,
+                                tankDevice: this.tankDevice,
+                                waterDevice: this.shelv10Device,
+                            }
+                        })
+                },
+                refreshSensors: function (event) {
+                    axios
+                        .get('/sensors')
+                        .then(response => {
+                            this.sensorOptions = response.data;
+                        });
                 }
             }
         });
