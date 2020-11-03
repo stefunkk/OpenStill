@@ -1,3 +1,16 @@
+#include "FileService.h"
+
+#include <FS.h>
+#include <Arduino.h>
+#include <ESPAsyncWebServer.h>
+#include <TaskManagerIO.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <ESP8266WiFi.h>
+#include <ESPAsyncTCP.h>
+
+
+#include "StillDataTask.h"
 #include "ConfigurationService.h"
 #include "StillDataContext.h"
 #include "WifiServer.h"
@@ -8,16 +21,13 @@
 #include "SensorTask.h"
 #include "HeaterTask.h"
 #include "Settings.h"
-#include <TaskManagerIO.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
-#include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <ESPAsyncTCP.h>
-#include <ESPAsyncWebServer.h>
+
+
 
 // DS18B20 sensor settings
 const uint8_t sensorPin = D7;
+const int csvTimeFrameInSeconds = 30;
+const bool saveCsv = true;
 
 // Heater settings
 const uint8_t SsrPin = D4;
@@ -27,8 +37,8 @@ const int heaterTimeFrameInSeconds = 2;
 const int tankSize = 50;
 
 // WIFI Settings
-const String WifiSsid = "";
-const String WifiPassword = "";
+const String WifiSsid = "mrowisko";
+const String WifiPassword = "grarzyna69";
 
 String Shelv10Name = "10P";
 String HeadName = "Gora";
@@ -47,7 +57,6 @@ void setup()
 {
 
 	Serial.begin(115200);
-    SPIFFS.begin();
 
 	delay(2000);
 
@@ -59,6 +68,8 @@ void setup()
 	settings->percentagePower = powerPercentage;
 	settings->percentagePower = powerPercentage;
 	settings->heaterTimeFrameInSeconds = heaterTimeFrameInSeconds;
+	settings->csvTimeFrameInSeconds = csvTimeFrameInSeconds;
+	settings->saveCsv = saveCsv;
 
 	auto *context = new StillDataContextClass(
 		Shelv10Address,
@@ -70,7 +81,9 @@ void setup()
 		TankName,
 		WaterName);
 
-	auto *configurationService = new ConfigurationServiceClass(*context, *settings);
+	auto *fileService = new FileServiceClass();
+
+	auto *configurationService = new ConfigurationServiceClass(*fileService, *context, *settings);
 	configurationService->loadConfiguration();
 
 	static auto *heaterTask = new HeaterTaskClass(*settings);
@@ -85,12 +98,17 @@ void setup()
 	auto *lcdService = new LcdServiceClass(*alcoholCalculator, *context, tankSize);
 	static auto *lcdTask = new LcdTaskClass(*sensorData, *lcdService);
 	
+
+	auto *csvTask = new StillDataTaskClass(*fileService, *sensorData, *settings);
+	//auto *csvTask = new CsvTaskClass();
+
 	auto* wifiClass = new WifiServerClass(WiFi, *server, *settings, *sensorData, *context, *configurationService);
 	wifiClass->connectToWifi();
 	
 	taskManager.registerEvent(lcdTask);
 	taskManager.registerEvent(sensorTask);
 	taskManager.registerEvent(heaterTask);
+	//taskManager.registerEvent(csvTask);
 
 }
 

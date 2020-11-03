@@ -23,9 +23,9 @@ void WifiServerClass::connectToWifi()
 
 void WifiServerClass::configurePages()
 {
-  _server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/index.html", String(), false);
-  });
+  // _server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+  //   request->send(SPIFFS, "/index.html", String(), false);
+  // });
 
   _server.on("/data", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];

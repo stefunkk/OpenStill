@@ -12,7 +12,10 @@ public:
 	powerResolution = 0,
 	percentagePower = 0,
 	heaterTimeFrameInSeconds = 0,
-    tankSize = 0;
+    tankSize = 0,
+    csvTimeFrameInSeconds = 0;
+
+    bool saveCsv = false;
 };
 
 #endif // __WIFISETTINGS_H__

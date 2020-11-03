@@ -1,69 +1,48 @@
 #include "ConfigurationService.h"
 
-ConfigurationServiceClass::ConfigurationServiceClass(StillDataContextClass &context, SettingsClass &settings) : _context(context), _settings(settings)
+ConfigurationServiceClass::ConfigurationServiceClass(FileServiceClass &fileService, StillDataContextClass &context, SettingsClass &settings) : _context(context), _settings(settings), _fileService(fileService)
 {
 }
 
 void ConfigurationServiceClass::loadConfiguration()
 {
-    File file = SPIFFS.open(_fileName, "r");
-    
-    if (!file)
+    auto fileContent = _fileService.openFile(_fileName);
+
+    if (fileContent.length() == 0)
     {
-        Serial.println(_fileName);
-        Serial.println(F("Failed to read configuration file - FS error or file missing."));
         return;
     }
+
     StaticJsonDocument<1000> doc;
 
-    DeserializationError error = deserializeJson(doc, file);
-    Serial.println(error.c_str());
-    if (error)
-        Serial.println(F("Failed to read file, using default configuration"));
+    DeserializationError error = deserializeJson(doc, fileContent);
 
-    // strlcpy(config.hostname,                 // <- destination
-    //         doc["hostname"] | "example.com", // <- source
-    //         sizeof(config.hostname));        // <- destination's capacity
+    if (error)
+    {
+        Serial.println(error.c_str());
+        Serial.println(F("Failed to read file, using default configuration"));
+    }
 
     _settings.percentagePower = doc["percentagePower"];
     _settings.heaterTimeFrameInSeconds = doc["heaterTimeFrameInSeconds"];
     _settings.tankSize = doc["tankSize"];
-    readArray("shelv10Address",doc,  _context.shelv10Address);
-    readArray("headAddress",   doc,  _context.headAddress);
-    readArray("tankAddress",   doc, _context.tankAddress);
-    readArray("waterAddress",  doc,  _context.waterAddress);
-
-    printFile(file);
-
-    file.close();
-}
-
-void ConfigurationServiceClass::readArray(String key, JsonDocument& doc, DeviceAddress& deviceAddress)
-{
-    for (int i = 0; i < 8; i++)
-    {
-        deviceAddress[i] = doc[key][i];
-    }
+    _settings.csvTimeFrameInSeconds = doc["csvTimeFrameInSeconds"];
+    readArray("shelv10Address", doc, _context.shelv10Address);
+    readArray("headAddress", doc, _context.headAddress);
+    readArray("tankAddress", doc, _context.tankAddress);
+    readArray("waterAddress", doc, _context.waterAddress);
 }
 
 void ConfigurationServiceClass::saveConfiguration()
 {
-    SPIFFS.remove(_fileName);
-
-    Serial.println(F("Saving configuration"));
-
-    File file = SPIFFS.open(_fileName, "w");
-    if (!file)
-    {
-        Serial.println(F("Failed to create file"));
-        return;
-    }
+    _fileService.removeFile(_fileName);
 
     StaticJsonDocument<1000> doc;
 
     doc["percentagePower"] = _settings.percentagePower;
     doc["heaterTimeFrameInSeconds"] = _settings.heaterTimeFrameInSeconds;
     doc["tankSize"] = _settings.tankSize;
+    doc["csvTimeFrameInSeconds"] = _settings.csvTimeFrameInSeconds;
 
     JsonArray shelv10Data = doc.createNestedArray("shelv10Address");
     writeArray(shelv10Data, _context.shelv10Address);
@@ -74,31 +53,21 @@ void ConfigurationServiceClass::saveConfiguration()
     JsonArray waterAddress = doc.createNestedArray("waterAddress");
     writeArray(waterAddress, _context.waterAddress);
 
-    if (serializeJson(doc, file) == 0)
+    String content;
+    if (serializeJson(doc, content) == 0)
     {
         Serial.println(F("Failed to write to file"));
     }
-    
-    printFile(file);
-    
-    file.close();
+
+    _fileService.saveFile(_fileName, content);
 }
 
-void ConfigurationServiceClass::printFile(File& file)
+void ConfigurationServiceClass::readArray(String key, JsonDocument &doc, DeviceAddress &deviceAddress)
 {
-    file.seek(0, SeekSet);
-
-	if (!file)
-	{
-		Serial.println(F("Failed to read file"));
-		return;
-	}
-
-	while (file.available())
-	{
-		Serial.print((char)file.read());
-	}
-	Serial.println();
+    for (int i = 0; i < 8; i++)
+    {
+        deviceAddress[i] = doc[key][i];
+    }
 }
 
 void ConfigurationServiceClass::writeArray(JsonArray &array, DeviceAddress &address)
