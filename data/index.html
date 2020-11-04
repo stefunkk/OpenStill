@@ -337,7 +337,7 @@
             mounted: function () {
                 this.interval = setInterval(() => {
                     axios
-                        .get('http://192.168.1.7/data')
+                        .get('/data')
                         .then(response => {
 
                             this.shelf10 = response.data.shelf10;
@@ -383,7 +383,7 @@
             methods: {
                 updateHeater: function (event) {
                     axios
-                        .get('http://192.168.1.7/set', {
+                        .get('/set', {
                             params: {
                                 heater: this.setHeater
                             }
@@ -391,7 +391,7 @@
                 },
                 updateSensors: function (event) {
                     axios
-                        .get('http://192.168.1.7/setDevices', {
+                        .get('/setDevices', {
                             params: {
                                 shelf10Device: this.shelf10Device,
                                 headerDevice: this.headerDevice,
@@ -402,7 +402,7 @@
                 },
                 setShelf10TemperatureLimit: function (event) {
                     axios
-                        .get('http://192.168.1.7/setLimits', {
+                        .get('/setLimits', {
                             params: {
                                 shelf10TemperatureLimit: this.shelf10TemperatureLimit
                             }
@@ -410,7 +410,7 @@
                 },
                 setHeaderTemperatureLimit: function (event) {
                     axios
-                        .get('http://192.168.1.7/setLimits', {
+                        .get('/setLimits', {
                             params: {
                                 headerTemperatureLimit: this.headerTemperatureLimit
                             }
@@ -418,7 +418,7 @@
                 },
                 setTankTemperatureLimit: function (event) {
                     axios
-                        .get('http://192.168.1.7/setLimits', {
+                        .get('/setLimits', {
                             params: {
                                 tankTemperatureLimit: this.tankTemperatureLimit
                             }
@@ -426,7 +426,7 @@
                 },
                 setWaterTemperatureLimit: function (event) {
                     axios
-                        .get('http://192.168.1.7/setLimits', {
+                        .get('/setLimits', {
                             params: {
                                 waterTemperatureLimit: this.waterTemperatureLimit
                             }
@@ -434,14 +434,14 @@
                 },
                 refreshSensors: function (event) {
                     axios
-                        .get('http://192.168.1.7/sensors')
+                        .get('/sensors')
                         .then(response => {
                             this.sensorOptions = response.data;
                         });
                 },
                 refreshLimits: function (event) {
                     axios
-                        .get('http://192.168.1.7/limitsData')
+                        .get('/limitsData')
                         .then(response => {
                             this.shelf10TemperatureLimit = response.data.shelf10TemperatureLimit;
                             this.headerTemperatureLimit = response.data.headerTemperatureLimit;
@@ -451,7 +451,7 @@
                 },
                 getLimit: function (event) {
                     axios
-                        .get('http://192.168.1.7/sensors')
+                        .get('/sensors')
                         .then(response => {
                             this.sensorOptions = response.data;
                         });
@@ -459,7 +459,7 @@
                 clearCsv: function (event) {
                     if (confirm("Na pewno chcesz wyzerować plik?")) {
                         axios
-                            .get('http://192.168.1.7/clearCsv');
+                            .get('/clearCsv');
                     }
                 },
                 getCsv: function (event) {
