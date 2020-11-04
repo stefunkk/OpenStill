@@ -11,6 +11,8 @@ Project for controlling still. Developed for ESP8266 (but should work for other 
 * Show ABV of vapour in head
 * Show amount of alcohol left in tank
 * Web server with information about temperatures, heater control and live charts
+* CSV data export with temperatures
+* Sensor temperature limit - turns off heater when temperature on sensor is reached
 
 ## Dependencies
 
@@ -21,6 +23,7 @@ Project for controlling still. Developed for ESP8266 (but should work for other 
 * [DallasTemperature](https://github.com/milesburton/Arduino-Temperature-Control-Library)
 * [IoAbstraction](https://github.com/davetcc/IoAbstraction)
 * [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer/)
+* ArduinoJson
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
