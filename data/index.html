@@ -27,13 +27,16 @@
         .heater-input-submit {
             margin-top: 1rem;
         }
-        .input-group-text { 
+
+        .input-group-text {
             min-width: 100px;
         }
-    </style>
-</head>
 
-<body>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
@@ -46,274 +49,369 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
+</head>
 
-    <div id="app" class="container-fluid py-5">
-        <div class="row">
-            <div class="col">
-                <div class="card-deck mb-12 text-center">
-                    <div class="card mb-3 shadow-sm">
-                        <div class="card-header">
-                            <h4 class="my-0 font-weight-normal">Półka (10)</h4>
-                        </div>
-                        <div class="card-body">
-                            <h1 class="card-title pricing-card-title">{{ shelf10 }} <small class="text-muted">°C</small>
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="card mb-3 shadow-sm">
-                        <div class="card-header">
-                            <h4 class="my-0 font-weight-normal">Głowica</h4>
-                        </div>
-                        <div class="card-body">
-                            <h1 class="card-title pricing-card-title">{{ header }} <small class="text-muted">°C</small>
-                            </h1>
-                        </div>
-                        <div v-if="headerAbv > 0" class="card-footer text-muted">
-                            {{ headerAbv }}%
-                        </div>
-                    </div>
-                    <div class="card mb-3 shadow-sm">
-                        <div class="card-header">
-                            <h4 class="my-0 font-weight-normal">Zbiornik</h4>
-                        </div>
-                        <div class="card-body">
-                            <h1 class="card-title pricing-card-title">{{ tank }} <small class="text-muted">°C</small>
-                            </h1>
-                        </div>
-                        
-                        <div v-if="tankAbw > 0" class="card-footer text-muted">
-                            {{ tankAbw }}L
-                        </div>
-                    </div>
-                    <div class="card mb-3 shadow-sm">
-                        <div class="card-header">
-                            <h4 class="my-0 font-weight-normal">Woda</h4>
-                        </div>
-                        <div class="card-body">
-                            <h1 class="card-title pricing-card-title">{{ water }} <small class="text-muted">°C</small>
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Grzałka</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">{{ heater }} <small class="text-muted">%</small>
-                        </h1>
-                    </div>
-                    <input class="form-control heater-input" type="number" id="setHeater" v-model="setHeater">
-                    <input v-on:click="updateHeater" type="button" value="Ustaw"
-                        class="heater-input-submit form-control heater-input btn btn-primary btn-lg btn-block" />
-                    <input type="range" min="0" max="100" v-model="setHeater"
-                        class="form-control heater-input range-slider">
-
-                </div>
-            </div>
-        </div>
+<body>
+    <div id="app">
 
 
+        <form v-if="false" action="/set" method="get">
+            <label for="wifiSsid">Wifi SSID</label>
+            <input type="text" name="wifiSsid"><br /><br />
+            <label for="wifiPassword">Wifi SSID</label>
+            <input type="text" name="wifiPassword"><br /><br />
+            <input type="submit" value="Ustaw">
+        </form>
+        <div class="container-fluid py-5" v-cloak>
 
-        <div>
-            <canvas id="myChart" width="400" height="200"></canvas>
-        </div>
 
-        <div class="configuration-container container-fluid" id="config">
             <div class="row">
                 <div class="col">
-                    <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#sensor"
-                        aria-expanded="false" aria-controls="sensor" v-on:click="refreshSensors">
-                        Termometry
-                    </button>
-                    <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#limity"
-                        aria-expanded="false" aria-controls="limity">
-                        Limity
-                    </button>
-                    <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
-                        data-target="#zmienne" aria-expanded="false" aria-controls="zmienne">
-                        Inne
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="collapse col" id="sensor" data-parent="#config">
-                        <div class="card card-body container-fluid">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <select v-model="shelf10Device" class="form-control form-control-lg">
-                                        <option disabled value="">10 Półka</option>
-                                        <option v-for="option in sensorOptions" v-bind:value="option.value">
-                                            {{ option.text }}
-                                        </option>
-                                    </select>
-                                </div>
+                    <div class="card-deck mb-12 text-center">
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Półka (10)</h4>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <select v-model="headerDevice" class="form-control form-control-lg">
-                                        <option disabled value="">Głowica</option>
-                                        <option v-for="option in sensorOptions" v-bind:value="option.value">
-                                            {{ option.text }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <select v-model="tankDevice" class="form-control form-control-lg">
-                                        <option disabled value="">Zbiornik</option>
-                                        <option v-for="option in sensorOptions" v-bind:value="option.value">
-                                            {{ option.text }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <select v-model="waterDevice" class="form-control form-control-lg">
-                                        <option disabled value="">Woda</option>
-                                        <option v-for="option in sensorOptions" v-bind:value="option.value">
-                                            {{ option.text }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div  class="col-md-4">
-                                    <input v-on:click="updateSensors" type="button" value="Ustaw"
-                                        class="form-control heater-input btn btn-primary btn-lg btn-block" />
-                                </div>
-                            </div>
+                            <div class="card-body">
+                                <h1 class="card-title pricing-card-title">{{ shelf10 }} <small
+                                        class="text-muted">°C</small>
 
+                                </h1>
+                            </div>
                         </div>
-
-                    </div>
-                    <div class="collapse" id="limity" data-parent="#config">
-                        <div class="card card-body container-fluid">
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">10 Półka</span>
-                                        </div>
-                                        <input class="form-control" v-model="shelf10TemperatureLimit" type="number">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setShelf10TemperatureLimit">Ustaw</button>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Głowica</span>
-                                        </div>
-                                        <input class="form-control" v-model="headerTemperatureLimit" type="number">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setHeaderTemperatureLimit">Ustaw</button>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Zbiornik</span>
-                                        </div>
-                                        <input class="form-control" v-model="tankTemperatureLimit" type="number">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setTankTemperatureLimit">Ustaw</button>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Woda</span>
-                                        </div>
-                                        <input class="form-control" v-model="waterTemperatureLimit" type="number">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setWaterTemperatureLimit">Ustaw</button>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Głowica</h4>
                             </div>
-
+                            <div class="card-body">
+                                <h1 class="card-title pricing-card-title">{{ header }} <small
+                                        class="text-muted">°C</small>
+                                </h1>
+                            </div>
+                            <div v-if="headerAbv > 0" class="card-footer text-muted">
+                                {{ headerAbv }}%
+                            </div>
                         </div>
-                    </div>
-                    <div class="collapse" id="zmienne" data-parent="#config">
-                        <div class="card card-body container-fluid">
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <button type="button" class="btn btn-primary btn-lg" v-on:click="getCsv">Pobierz
-                                        CSV</button>
-                                    <button type="button" class="btn btn-link" v-on:click="clearCsv">Wyzeruj
-                                        CSV</button>
-                                </div>
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Zbiornik</h4>
+                            </div>
+                            <div class="card-body">
+                                <h1 class="card-title pricing-card-title">{{ tank }} <small
+                                        class="text-muted">°C</small>
+                                </h1>
                             </div>
 
-                            <div class="row">
-                                <div class="input-group col-md-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Ilość wsadu (l)</span>
-                                    </div>
-                                    <input class="form-control" v-model="tankSize" type="number">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button"
-                                            v-on:click="setTankSize">Ustaw</button>
-                                    </div>
-                                </div>
+                            <div v-if="tankAbw > 0" class="card-footer text-muted">
+                                {{ tankAbw }}L
                             </div>
-
-                            <div class="row">
-                                <div class="input-group col-md-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Przedział CSV (s)</span>
-                                    </div>
-                                    <input class="form-control" v-model="csvTimeFrameInSeconds" type="number">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button"
-                                            v-on:click="setCsvTimeFrameInSeconds">Ustaw</button>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Woda</h4>
                             </div>
-
-                            <div class="row">
-                                <div class="input-group col-md-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Kod Push</span>
-                                    </div>
-                                    <input class="form-control" v-model="pushNotificationCode" type="text">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button"
-                                            v-on:click="setPushNotificationCode">Ustaw</button>
-                                    </div>
-                                    <div class="ml-2">
-                                        <button class="btn btn-secondary" type="button"
-                                        v-on:click="testPushNotificationCode">Test</button>
-                                    </div>
-                                </div>
+                            <div class="card-body">
+                                <h1 class="card-title pricing-card-title">{{ water }} <small
+                                        class="text-muted">°C</small>
+                                </h1>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Grzałka</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ heater }} <small class="text-muted">%</small>
+                            </h1>
+                        </div>
+                        <input class="form-control heater-input" type="number" id="setHeater" v-model="setHeater">
+                        <input v-on:click="updateHeater" type="button" value="Ustaw"
+                            class="heater-input-submit form-control heater-input btn btn-primary btn-lg btn-block" />
+                        <input type="range" min="0" max="100" v-model="setHeater"
+                            class="form-control heater-input range-slider">
 
+                    </div>
+                </div>
             </div>
 
 
+
+            <div>
+                <canvas id="myChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="configuration-container container-fluid" id="config">
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
+                            data-target="#sensor" aria-expanded="false" aria-controls="sensor"
+                            v-on:click="refreshSensors">
+                            Termometry
+                        </button>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
+                            data-target="#limity" aria-expanded="false" aria-controls="limity">
+                            Limity
+                        </button>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
+                            data-target="#temperaturaDnia" aria-expanded="false" aria-controls="temperaturaDnia">
+                            Temperatura dnia
+                        </button>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
+                            data-target="#zmienne" aria-expanded="false" aria-controls="zmienne">
+                            Inne
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="collapse col" id="sensor" data-parent="#config">
+                            <div class="card card-body container-fluid">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select v-model="shelf10Device" class="form-control form-control-lg">
+                                            <option disabled value="">10 Półka</option>
+                                            <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                                {{ option.text }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select v-model="headerDevice" class="form-control form-control-lg">
+                                            <option disabled value="">Głowica</option>
+                                            <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                                {{ option.text }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select v-model="tankDevice" class="form-control form-control-lg">
+                                            <option disabled value="">Zbiornik</option>
+                                            <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                                {{ option.text }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select v-model="waterDevice" class="form-control form-control-lg">
+                                            <option disabled value="">Woda</option>
+                                            <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                                {{ option.text }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input v-on:click="updateSensors" type="button" value="Ustaw"
+                                            class="form-control heater-input btn btn-primary btn-lg btn-block" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="collapse" id="limity" data-parent="#config">
+                            <div class="card card-body container-fluid">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">10 Półka</span>
+                                            </div>
+                                            <input class="form-control" v-model="shelf10TemperatureLimit" type="number">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    v-on:click="setShelf10TemperatureLimit">Ustaw</button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Głowica</span>
+                                            </div>
+                                            <input class="form-control" v-model="headerTemperatureLimit" type="number">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    v-on:click="setHeaderTemperatureLimit">Ustaw</button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Zbiornik</span>
+                                            </div>
+                                            <input class="form-control" v-model="tankTemperatureLimit" type="number">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    v-on:click="setTankTemperatureLimit">Ustaw</button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Woda</span>
+                                            </div>
+                                            <input class="form-control" v-model="waterTemperatureLimit" type="number">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    v-on:click="setWaterTemperatureLimit">Ustaw</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="collapse" id="temperaturaDnia" data-parent="#config">
+                            <div class="card card-body container-fluid">
+
+                                <div class="row">
+                                    <div class="input-group col-md-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Temperatura dnia (10P)</span>
+                                        </div>
+                                        <input class="form-control" v-model="tempOfTheDay" type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setTempOfTheDay">Ustaw</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-group col-md-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Bezpieczna odchyłka</span>
+                                        </div>
+                                        <input class="form-control" v-model="tempOfTheDayDeviation" type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setTempOfTheDayDeviation">Ustaw</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-group col-md-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Częstotliwość powiadomień (s)</span>
+                                        </div>
+                                        <input class="form-control" v-model="tempOfTheDayNotificationDelayInSeconds"
+                                            type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setTempOfTheDayNotificationDelayInSeconds">Ustaw</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="collapse" id="zmienne" data-parent="#config">
+                            <div class="card card-body container-fluid">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn btn-primary btn-lg" v-on:click="getCsv">Pobierz
+                                            CSV</button>
+                                        <button type="button" class="btn btn-link" v-on:click="clearCsv">Wyzeruj
+                                            CSV</button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-group col-md-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Ilość wsadu (l)</span>
+                                        </div>
+                                        <input class="form-control" v-model="tankSize" type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setTankSize">Ustaw</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-group col-md-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Przedział CSV (s)</span>
+                                        </div>
+                                        <input class="form-control" v-model="csvTimeFrameInSeconds" type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setCsvTimeFrameInSeconds">Ustaw</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-group col-md-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">WifI SSID</span>
+                                        </div>
+                                        <input class="form-control" v-model="wifiSsid" type="text">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setWifiSsid">Ustaw</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-group col-md-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Wifi hasło</span>
+                                        </div>
+                                        <input class="form-control" v-model="wifiPassword" type="text">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setWifiPassword">Ustaw</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-group col-md-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Kod Push</span>
+                                        </div>
+                                        <input class="form-control" v-model="pushNotificationCode" type="text">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setPushNotificationCode">Ustaw</button>
+                                        </div>
+                                        <div class="ml-2">
+                                            <button class="btn btn-secondary" type="button"
+                                                v-on:click="testPushNotificationCode">Test</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
 
         </div>
+
 
     </div>
-
-
-
 
 
     <script type="module">
@@ -408,7 +506,13 @@
                 csvTimeFrameInSeconds: 0,
                 tankAbw: 0,
                 headerAbv: 0,
-                pushNotificationCode: ""
+                pushNotificationCode: "",
+                tempOfTheDayDeviation: 0,
+                tempOfTheDayNotificationDelayInSeconds: 0,
+                tempOfTheDay: 0,
+                wifiSsid: "",
+                wifiPassword: ""
+
 
 
             },
@@ -470,11 +574,51 @@
                             }
                         })
                 },
+                setWifiSsid: function (event) {
+                    axios
+                        .get('/set', {
+                            params: {
+                                wifiSsid: this.wifiSsid
+                            }
+                        })
+                },
+                setWifiPassword: function (event) {
+                    axios
+                        .get('/set', {
+                            params: {
+                                wifiPassword: this.wifiPassword
+                            }
+                        })
+                },
                 setPushNotificationCode: function (event) {
                     axios
                         .get('/set', {
                             params: {
                                 pushNotificationCode: this.pushNotificationCode
+                            }
+                        })
+                },
+                setTempOfTheDay: function (event) {
+                    axios
+                        .get('/set', {
+                            params: {
+                                tempOfTheDay: this.tempOfTheDay
+                            }
+                        })
+                },
+                setTempOfTheDayNotificationDelayInSeconds: function (event) {
+                    axios
+                        .get('/set', {
+                            params: {
+                                tempOfTheDayNotificationDelayInSeconds: this.tempOfTheDayNotificationDelayInSeconds
+                            }
+                        })
+                },
+                setTempOfTheDayDeviation: function (event) {
+                    axios
+                        .get('/set', {
+                            params: {
+                                tempOfTheDayDeviation: this.tempOfTheDayDeviation
                             }
                         })
                 },
@@ -561,6 +705,10 @@
                             this.tankSize = response.data.tankSize;
                             this.csvTimeFrameInSeconds = response.data.csvTimeFrameInSeconds;
                             this.pushNotificationCode = response.data.pushNotificationCode;
+
+                            this.tempOfTheDayDeviation = response.data.tempOfTheDayDeviation;
+                            this.tempOfTheDayNotificationDelayInSeconds = response.data.tempOfTheDayNotificationDelayInSeconds;
+                            this.tempOfTheDay = response.data.tempOfTheDay;
                         });
                 },
                 getLimit: function (event) {

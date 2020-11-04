@@ -17,6 +17,11 @@ public:
     String headName;
     String tankName;
     String waterName;
+    
+    double tempOfTheDayDeviation = 0;
+    int tempOfTheDayNotificationDelayInSeconds = 0;
+    double tempOfTheDay = 0;
+    unsigned long tempofTheDayNotificationTime = 0;
 
     StillNotificationStruct notifications[10]; 
     bool findSensors = false;

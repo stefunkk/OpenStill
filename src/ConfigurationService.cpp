@@ -32,7 +32,11 @@ void ConfigurationServiceClass::loadConfiguration()
     _settings.headerTemperatureLimit = doc["headerTemperatureLimit"];
     _settings.tankTemperatureLimit = doc["tankTemperatureLimit"];
     _settings.waterTemperatureLimit = doc["waterTemperatureLimit"];
+    _settings.wifiSsid = doc["wifiSsid"].as<String>();
+    _settings.wifiPassword = doc["wifiPassword"].as<String>();
+
     strlcpy(_settings.pushNotificationCode, doc["pushNotificationCode"], sizeof(_settings.pushNotificationCode));
+
 
     readArray("shelf10Address", doc, _context.shelf10Address);
     readArray("headAddress", doc, _context.headAddress);
@@ -64,6 +68,8 @@ void ConfigurationServiceClass::saveConfiguration()
     doc["headerTemperatureLimit"] = _settings.headerTemperatureLimit;
     doc["tankTemperatureLimit"] = _settings.tankTemperatureLimit;
     doc["waterTemperatureLimit"] = _settings.waterTemperatureLimit;
+    doc["wifiSsid"] = _settings.wifiSsid;
+    doc["wifiPassword"] = _settings.wifiPassword;
 
     JsonArray shelf10Data = doc.createNestedArray("shelf10Address");
     writeArray(shelf10Data, _context.shelf10Address);

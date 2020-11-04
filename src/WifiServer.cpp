@@ -3,8 +3,6 @@
 WifiServerClass::WifiServerClass(ESP8266WiFiClass &wifi, AsyncWebServer &server, SettingsClass &wifiSettings,
                                  SensorDataClass &sensorData, StillDataContextClass &context, ConfigurationServiceClass &configurationService) : _wifi(wifi), _server(server), _settings(wifiSettings), _sensorData(sensorData), _context(context), _configurationService(configurationService)
 {
-  configurePages();
-  configureInputs();
 
   DefaultHeaders::Instance().addHeader(F("Access-Control-Allow-Origin"), F("*"));
   DefaultHeaders::Instance().addHeader(F("Access-Control-Allow-Headers"), F("content-type"));
@@ -15,7 +13,37 @@ void WifiServerClass::connectToWifi()
   _wifi.mode(WIFI_STA);
   _wifi.begin(_settings.wifiSsid, _settings.wifiPassword);
 
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+  
   _server.begin();
+
+  Serial.println();
+
+  configurePages();
+  configureInputs();
+}
+
+void WifiServerClass::setupAccessPoint()
+{
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(100);
+
+  IPAddress localIp(192, 168, 4, 1);
+  IPAddress gateway(192, 168, 4, 1);
+  IPAddress subnet(255, 255, 255, 0);
+
+  WiFi.softAPConfig(localIp, gateway, subnet);
+  WiFi.softAP("OpenStill");
+
+  Serial.print("IP address: ");
+  Serial.println(WiFi.softAPIP());
+
+  _server.begin();
+
+  configurePages();
+  configureInputs();
 }
 
 void WifiServerClass::configurePages()
@@ -33,30 +61,33 @@ void WifiServerClass::configurePages()
   _server.on("/data", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
-      "\"shelf10\": %.02f, \"header\": %.02f, \"tank\": %.02f, \"water\": %.02f, \"heater\": %i, "
-      "\"tankAbw\": %.02f, \"headerAbv\": %.02f1 "
-    "}", 
-    _sensorData.shelf10, _sensorData.header, _sensorData.tank, _sensorData.water, _settings.percentagePower,
-    AlcoholCalculatorClass::calculateAlcoholVolumeByWashBoilingTemperature(_sensorData.tank, _settings.tankSize), AlcoholCalculatorClass::calculateAbvByHeadVapourTemperature(_sensorData.header));
+                  "\"shelf10\": %.02f, \"header\": %.02f, \"tank\": %.02f, \"water\": %.02f, \"heater\": %i, "
+                  "\"tankAbw\": %.02f, \"headerAbv\": %.02f1 "
+                  "}",
+            _sensorData.shelf10, _sensorData.header, _sensorData.tank, _sensorData.water, _settings.percentagePower,
+            AlcoholCalculatorClass::calculateAlcoholVolumeByWashBoilingTemperature(_sensorData.tank, _settings.tankSize), AlcoholCalculatorClass::calculateAbvByHeadVapourTemperature(_sensorData.header));
     request->send(200, "application/json", data);
   });
 
   _server.on("/limitsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
-      "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i "
-    "}", 
-    _settings.shelf10TemperatureLimit, _settings.headerTemperatureLimit, _settings.tankTemperatureLimit, _settings.waterTemperatureLimit);
+                  "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i "
+                  "}",
+            _settings.shelf10TemperatureLimit, _settings.headerTemperatureLimit, _settings.tankTemperatureLimit, _settings.waterTemperatureLimit);
     request->send(200, "application/json", data);
   });
 
-    
   _server.on("/otherConfiguration", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
-      "\"tankSize\": %i, \"csvTimeFrameInSeconds\": %i, \"pushNotificationCode\": \"%s\""
-    "}", 
-    _settings.tankSize, _settings.csvTimeFrameInSeconds, _settings.pushNotificationCode);
+                  "\"tankSize\": %i, \"csvTimeFrameInSeconds\": %i, \"pushNotificationCode\": \"%s\","
+                  "\"tempOfTheDayDeviation\": %.02f, \"tempOfTheDayNotificationDelayInSeconds\": %i, \"tempOfTheDay\": %.02f,"
+                  "\"wifiSsid\": %s, \"wifiPassword\": %s"
+                  "}",
+            _settings.tankSize, _settings.csvTimeFrameInSeconds, _settings.pushNotificationCode,
+            _context.tempOfTheDayDeviation, _context.tempOfTheDayNotificationDelayInSeconds, _context.tempOfTheDay,
+            _settings.wifiSsid.c_str(), _settings.wifiPassword.c_str());
     request->send(200, "application/json", data);
   });
 
@@ -162,7 +193,7 @@ void WifiServerClass::configureInputs()
       int temperatureLimit = request->getParam(_waterTemperatureLimit)->value().toInt();
       _settings.waterTemperatureLimit = temperatureLimit;
     }
-    
+
     _configurationService.saveConfiguration();
 
     request->send(200, "text/html");
@@ -178,7 +209,7 @@ void WifiServerClass::configureInputs()
         _settings.percentagePower = heatingPower;
       }
     }
-    else if (request->hasParam(_tankSize))
+    if (request->hasParam(_tankSize))
     {
       int tankSize = request->getParam(_tankSize)->value().toInt();
       if (tankSize <= 500 && tankSize >= 0)
@@ -186,21 +217,41 @@ void WifiServerClass::configureInputs()
         _settings.tankSize = tankSize;
       }
     }
-    else if (request->hasParam(_csvTimeFrameInSeconds))
+    if (request->hasParam(_csvTimeFrameInSeconds))
     {
       int csvTimeFrame = request->getParam(_csvTimeFrameInSeconds)->value().toInt();
       _settings.csvTimeFrameInSeconds = csvTimeFrame;
     }
-    else if (request->hasParam(_pushNotificationCode))
+    if (request->hasParam(_pushNotificationCode))
     {
       String notificationCode = request->getParam(_pushNotificationCode)->value();
       strlcpy(_settings.pushNotificationCode, notificationCode.c_str(), sizeof(_settings.pushNotificationCode));
     }
-
-    else
+    if (request->hasParam(_tempOfTheDay))
     {
-      request->send(404, "text/html");
-      return;
+      auto tempOfTheDay = request->getParam(_tempOfTheDay)->value().toFloat();
+      _context.tempOfTheDay = tempOfTheDay;
+      _context.tempofTheDayNotificationTime = millis();
+    }
+    if (request->hasParam(_tempOfTheDayNotificationDelayInSeconds))
+    {
+      auto tempOfTheDayDelay = request->getParam(_tempOfTheDayNotificationDelayInSeconds)->value().toInt();
+      _context.tempOfTheDayNotificationDelayInSeconds = tempOfTheDayDelay;
+    }
+    if (request->hasParam(_tempOfTheDayDeviation))
+    {
+      auto tempOfTheDayDeviation = request->getParam(_tempOfTheDayDeviation)->value().toFloat();
+      _context.tempOfTheDayDeviation = tempOfTheDayDeviation;
+    }
+    if (request->hasParam(_wifiSsid))
+    {
+      auto wifiSsid = request->getParam(_wifiSsid)->value();
+      _settings.wifiSsid = wifiSsid;
+    }
+    if (request->hasParam(_wifiPassword))
+    {
+      auto wifiPassword = request->getParam(_wifiPassword)->value();
+      _settings.wifiPassword = wifiPassword;
     }
 
     _configurationService.saveConfiguration();

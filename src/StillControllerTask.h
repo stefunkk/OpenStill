@@ -6,18 +6,21 @@
 #include <TaskManagerIO.h>
 #include "NotificationHelper.h"
 
-class StillControllerTaskClass: public BaseEvent
+class StillControllerTaskClass : public BaseEvent
 {
- public:
-	StillControllerTaskClass(SensorDataClass& sensorData, SettingsClass& settings, StillDataContextClass& context);
+public:
+	StillControllerTaskClass(SensorDataClass &sensorData, SettingsClass &settings, StillDataContextClass &context);
 	void exec() override;
 	uint32_t timeOfNextCheck() override;
- private:
-	 SensorDataClass& _sensorData;
-	 SettingsClass& _settings;
-     StillDataContextClass& _context;
 
-     bool isTemperatureLimitReached();
+private:
+	SensorDataClass &_sensorData;
+	SettingsClass &_settings;
+	StillDataContextClass &_context;
+
+	void checkTempOfTheDay();
+	void checkTemperatureLimit();
+	bool isTemperatureLimitReached();
 };
 
 #endif // __STILLCONTROLLERTASK_H__

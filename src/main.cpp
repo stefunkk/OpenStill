@@ -48,7 +48,6 @@ DeviceAddress WaterAddress = {0x28, 0xFF, 0xB7, 0x78, 0x90, 0x17, 0x05, 0x77};
 
 auto server = new AsyncWebServer(80);
 
-
 void setup()
 {
 
@@ -62,8 +61,8 @@ void setup()
 	settings->percentagePower = powerPercentage;
 	settings->percentagePower = powerPercentage;
 	settings->heaterTimeFrameInSeconds = heaterTimeFrameInSeconds;
-    settings->csvTimeFrameInSeconds = csvTimeFrameInSeconds;
-    settings->saveCsv = saveCsv;
+	settings->csvTimeFrameInSeconds = csvTimeFrameInSeconds;
+	settings->saveCsv = saveCsv;
 
 	auto *context = new StillDataContextClass(
 		shelf10Address,
@@ -75,8 +74,8 @@ void setup()
 		TankName,
 		WaterName);
 
-    auto *fileService = new FileServiceClass();
-    auto *configurationService = new ConfigurationServiceClass(*fileService, *context, *settings);
+	auto *fileService = new FileServiceClass();
+	auto *configurationService = new ConfigurationServiceClass(*fileService, *context, *settings);
 	configurationService->loadConfiguration();
 
 	static auto *heaterTask = new HeaterTaskClass(*settings);
@@ -90,23 +89,31 @@ void setup()
 	auto *alcoholCalculator = new AlcoholCalculatorClass;
 	auto *lcdService = new LcdServiceClass(*alcoholCalculator, *context, tankSize);
 	static auto *lcdTask = new LcdTaskClass(*sensorData, *lcdService);
-	
-	auto* stillDataTask = new StillDataTaskClass(*context, *fileService, *sensorData, *settings);
 
-	auto* stillControllerTask = new StillControllerTaskClass(*sensorData, *settings, *context);
+	auto *stillDataTask = new StillDataTaskClass(*context, *fileService, *sensorData, *settings);
 
-	auto* notificationTask = new NotificationTaskClass(*context, *settings);
+	auto *stillControllerTask = new StillControllerTaskClass(*sensorData, *settings, *context);
 
-	auto* wifiClass = new WifiServerClass(WiFi, *server, *settings, *sensorData, *context, *configurationService);
-	wifiClass->connectToWifi();
-	
+	auto *notificationTask = new NotificationTaskClass(*context, *settings);
+
+	auto *wifiClass = new WifiServerClass(WiFi, *server, *settings, *sensorData, *context, *configurationService);
+
+
+	if (settings->wifiSsid == nullptr || settings->wifiSsid == "" || settings->wifiSsid == "null")
+	{
+		wifiClass->setupAccessPoint();
+	}
+	else
+	{
+		wifiClass->connectToWifi();
+	}
+
 	taskManager.registerEvent(lcdTask);
 	taskManager.registerEvent(sensorTask);
 	taskManager.registerEvent(heaterTask);
 	taskManager.registerEvent(stillDataTask);
 	taskManager.registerEvent(stillControllerTask);
 	taskManager.registerEvent(notificationTask);
-
 }
 
 void loop()

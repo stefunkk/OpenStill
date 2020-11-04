@@ -6,6 +6,12 @@ StillControllerTaskClass::StillControllerTaskClass(SensorDataClass &sensorData, 
 
 void StillControllerTaskClass::exec()
 {
+	checkTemperatureLimit();
+	checkTempOfTheDay();
+}
+
+void StillControllerTaskClass::checkTemperatureLimit()
+{
 	if (isTemperatureLimitReached())
 	{
 		if (_settings.percentagePower > 0)
@@ -28,4 +34,21 @@ uint32_t StillControllerTaskClass::timeOfNextCheck()
 {
 	setTriggered(true);
 	return millisToMicros(5000);
+}
+
+void StillControllerTaskClass::checkTempOfTheDay()
+{
+	if (_context.tempOfTheDay == 0)
+	{
+		return;
+	}
+
+	auto tempDeviation = _sensorData.shelf10 - _context.tempOfTheDay;
+	auto timeFromLastNotification = millis() - _context.tempofTheDayNotificationTime;
+
+	if (tempDeviation > _context.tempOfTheDayDeviation && timeFromLastNotification > (_context.tempOfTheDayNotificationDelayInSeconds * 1000))
+	{
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura dnia przekroczona o " + String(tempDeviation));
+		_context.tempofTheDayNotificationTime = millis();
+	}
 }

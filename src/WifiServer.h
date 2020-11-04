@@ -18,6 +18,7 @@ public:
 	WifiServerClass(ESP8266WiFiClass &wifi, AsyncWebServer &server, SettingsClass &wifiSettings, SensorDataClass &_sensorData,
 					StillDataContextClass &context, ConfigurationServiceClass &configurationService);
 	void connectToWifi();
+	void setupAccessPoint();
 
 
 private:
@@ -28,6 +29,12 @@ private:
 	const char *_tankSize = "tankSize";
 	const char *_findSensors = "findSensors";
 	const char *_csvTimeFrameInSeconds = "csvTimeFrameInSeconds";
+	const char *_tempOfTheDay = "tempOfTheDay";
+	const char *_tempOfTheDayNotificationDelayInSeconds = "tempOfTheDayNotificationDelayInSeconds";
+	const char *_tempOfTheDayDeviation = "tempOfTheDayDeviation";
+	
+	const char *_wifiSsid = "wifiSsid";
+	const char *_wifiPassword = "wifiPassword";
 
 	const char *_pushNotificationCode = "pushNotificationCode";
 
