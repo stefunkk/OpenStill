@@ -15,6 +15,8 @@ public:
 	int heaterTimeFrameInSeconds = 0;
     int tankSize = 0;
     int csvTimeFrameInSeconds = 0;
+    
+    char pushNotificationCode[100]= "";
 
     int shelf10TemperatureLimit = 999;
     int headerTemperatureLimit = 999;

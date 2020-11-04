@@ -69,9 +69,6 @@ double AlcoholCalculatorClass::calculateAlcoholVolumeByWashBoilingTemperature(fl
 		return ERROR;
 	}
 
-	Serial.print("Zbiornik w procentach: ");
-	Serial.println(percentage);
-
 	return percentage / 100 * washVolume;
 }
 

@@ -10,6 +10,7 @@
 #include "StillDataContext.h"
 #include "ConfigurationService.h"
 #include "AlcoholCalculator.h"
+#include "NotificationHelper.h"
 
 class WifiServerClass
 {
@@ -27,6 +28,8 @@ private:
 	const char *_tankSize = "tankSize";
 	const char *_findSensors = "findSensors";
 	const char *_csvTimeFrameInSeconds = "csvTimeFrameInSeconds";
+
+	const char *_pushNotificationCode = "pushNotificationCode";
 
 	const char *_shelf10Device = "shelf10Device";
 	const char *_headerDevice = "headerDevice";

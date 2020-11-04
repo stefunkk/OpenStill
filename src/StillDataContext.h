@@ -2,6 +2,7 @@
 #define __DATACONTEXT_H__
 #include <Arduino.h>
 #include <DallasTemperature.h>
+#include "StillNotification.h"
 
 class StillDataContextClass
 {
@@ -17,6 +18,7 @@ public:
     String tankName;
     String waterName;
 
+    StillNotificationStruct notifications[10]; 
     bool findSensors = false;
     bool clearCsv = false;
     DeviceAddress foundDevices[4] = {};

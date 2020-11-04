@@ -18,6 +18,7 @@
 #include "FileService.h"
 #include "StillDataTask.h"
 #include "StillControllerTask.h"
+#include "NotificationTask.h"
 
 // DS18B20 sensor settings
 const uint8_t sensorPin = D7;
@@ -94,6 +95,8 @@ void setup()
 
 	auto* stillControllerTask = new StillControllerTaskClass(*sensorData, *settings, *context);
 
+	auto* notificationTask = new NotificationTaskClass(*context, *settings);
+
 	auto* wifiClass = new WifiServerClass(WiFi, *server, *settings, *sensorData, *context, *configurationService);
 	wifiClass->connectToWifi();
 	
@@ -102,6 +105,7 @@ void setup()
 	taskManager.registerEvent(heaterTask);
 	taskManager.registerEvent(stillDataTask);
 	taskManager.registerEvent(stillControllerTask);
+	taskManager.registerEvent(notificationTask);
 
 }
 

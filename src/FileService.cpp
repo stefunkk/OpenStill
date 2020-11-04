@@ -40,6 +40,7 @@ void FileServiceClass::saveFile(String path, String content)
     _fileLock = true;
 
     File file = _fs.open(path, "a");
+
     if (!file)
     {
         Serial.println(F("Failed to create file"));

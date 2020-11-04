@@ -12,9 +12,6 @@ WifiServerClass::WifiServerClass(ESP8266WiFiClass &wifi, AsyncWebServer &server,
 
 void WifiServerClass::connectToWifi()
 {
-  Serial.println(_settings.wifiSsid);
-  Serial.println(_settings.wifiPassword);
-
   _wifi.mode(WIFI_STA);
   _wifi.begin(_settings.wifiSsid, _settings.wifiPassword);
 
@@ -47,18 +44,19 @@ void WifiServerClass::configurePages()
   _server.on("/limitsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
-      "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i, "
+      "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i "
     "}", 
     _settings.shelf10TemperatureLimit, _settings.headerTemperatureLimit, _settings.tankTemperatureLimit, _settings.waterTemperatureLimit);
     request->send(200, "application/json", data);
   });
 
+    
   _server.on("/otherConfiguration", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
-      "\"tankSize\": %i, \"csvTimeFrameInSeconds\": %i"
+      "\"tankSize\": %i, \"csvTimeFrameInSeconds\": %i, \"pushNotificationCode\": \"%s\""
     "}", 
-    _settings.tankSize, _settings.csvTimeFrameInSeconds);
+    _settings.tankSize, _settings.csvTimeFrameInSeconds, _settings.pushNotificationCode);
     request->send(200, "application/json", data);
   });
 
@@ -107,6 +105,11 @@ void WifiServerClass::configureInputs()
 {
   _server.on("/clearCsv", HTTP_GET, [this](AsyncWebServerRequest *request) {
     _context.clearCsv = true;
+    request->send(200, "text/html");
+  });
+
+  _server.on("/notificationTest", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    NotificationHelperClass::addNotification(_context, "OpenStill", "Testowe powiadomienie");
     request->send(200, "text/html");
   });
 
@@ -188,6 +191,12 @@ void WifiServerClass::configureInputs()
       int csvTimeFrame = request->getParam(_csvTimeFrameInSeconds)->value().toInt();
       _settings.csvTimeFrameInSeconds = csvTimeFrame;
     }
+    else if (request->hasParam(_pushNotificationCode))
+    {
+      String notificationCode = request->getParam(_pushNotificationCode)->value();
+      strlcpy(_settings.pushNotificationCode, notificationCode.c_str(), sizeof(_settings.pushNotificationCode));
+    }
+
     else
     {
       request->send(404, "text/html");

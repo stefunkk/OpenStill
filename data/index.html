@@ -283,6 +283,23 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="input-group col-md-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Kod Push</span>
+                                    </div>
+                                    <input class="form-control" v-model="pushNotificationCode" type="text">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            v-on:click="setPushNotificationCode">Ustaw</button>
+                                    </div>
+                                    <div class="ml-2">
+                                        <button class="btn btn-secondary" type="button"
+                                        v-on:click="testPushNotificationCode">Test</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -390,7 +407,8 @@
                 tankSize: 0,
                 csvTimeFrameInSeconds: 0,
                 tankAbw: 0,
-                headerAbv: 0
+                headerAbv: 0,
+                pushNotificationCode: ""
 
 
             },
@@ -449,6 +467,14 @@
                         .get('/set', {
                             params: {
                                 heater: this.setHeater
+                            }
+                        })
+                },
+                setPushNotificationCode: function (event) {
+                    axios
+                        .get('/set', {
+                            params: {
+                                pushNotificationCode: this.pushNotificationCode
                             }
                         })
                 },
@@ -534,6 +560,7 @@
                         .then(response => {
                             this.tankSize = response.data.tankSize;
                             this.csvTimeFrameInSeconds = response.data.csvTimeFrameInSeconds;
+                            this.pushNotificationCode = response.data.pushNotificationCode;
                         });
                 },
                 getLimit: function (event) {
@@ -542,6 +569,10 @@
                         .then(response => {
                             this.sensorOptions = response.data;
                         });
+                },
+                testPushNotificationCode: function (event) {
+                    axios
+                        .get('/notificationTest');
                 },
                 clearCsv: function (event) {
                     if (confirm("Na pewno chcesz wyzerować plik?")) {

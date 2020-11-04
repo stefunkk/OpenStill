@@ -13,7 +13,7 @@ void ConfigurationServiceClass::loadConfiguration()
         return;
     }
 
-    StaticJsonDocument<1000> doc;
+    StaticJsonDocument<1500> doc;
 
     DeserializationError error = deserializeJson(doc, fileContent);
 
@@ -32,6 +32,7 @@ void ConfigurationServiceClass::loadConfiguration()
     _settings.headerTemperatureLimit = doc["headerTemperatureLimit"];
     _settings.tankTemperatureLimit = doc["tankTemperatureLimit"];
     _settings.waterTemperatureLimit = doc["waterTemperatureLimit"];
+    strlcpy(_settings.pushNotificationCode, doc["pushNotificationCode"], sizeof(_settings.pushNotificationCode));
 
     readArray("shelf10Address", doc, _context.shelf10Address);
     readArray("headAddress", doc, _context.headAddress);
@@ -51,12 +52,13 @@ void ConfigurationServiceClass::saveConfiguration()
 {
     _fileService.removeFile(_fileName);
 
-    StaticJsonDocument<1000> doc;
+    StaticJsonDocument<1500> doc;
 
     doc["percentagePower"] = _settings.percentagePower;
     doc["heaterTimeFrameInSeconds"] = _settings.heaterTimeFrameInSeconds;
     doc["tankSize"] = _settings.tankSize;
     doc["csvTimeFrameInSeconds"] = _settings.csvTimeFrameInSeconds;
+    doc["pushNotificationCode"] = _settings.pushNotificationCode;
 
     doc["shelf10TemperatureLimit"] = _settings.shelf10TemperatureLimit;
     doc["headerTemperatureLimit"] = _settings.headerTemperatureLimit;
