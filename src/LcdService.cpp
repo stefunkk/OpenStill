@@ -10,7 +10,7 @@
 LiquidCrystalI2C_RS_EN(lcd, LCD_ADDRESS, false)
 
 	LcdServiceClass::LcdServiceClass(AlcoholCalculatorClass &alcoholCalculator,
-									 StillDataContextClass &context, float tankSize) : _lcd(*lcd), _alcoholCalculator(alcoholCalculator), _temperatures{0, 0, 0, 0}, _context(context)
+									 StillDataContextClass &context, float tankSize) : _lcd(lcd), _alcoholCalculator(alcoholCalculator), _temperatures{0, 0, 0, 0}, _context(context)
 {
 	_tankSize = tankSize;
 
