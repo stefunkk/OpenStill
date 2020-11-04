@@ -4,6 +4,7 @@
 #include "SensorData.h"
 #include "StillDataContext.h"
 #include <TaskManagerIO.h>
+#include "NotificationHelper.h"
 
 class StillControllerTaskClass: public BaseEvent
 {
