@@ -68,7 +68,7 @@
                             <h1 class="card-title pricing-card-title">{{ header }} <small class="text-muted">°C</small>
                             </h1>
                         </div>
-                        <div v-if="headerAbv" class="card-footer text-muted">
+                        <div v-if="headerAbv > 0" class="card-footer text-muted">
                             {{ headerAbv }}%
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                             </h1>
                         </div>
                         
-                        <div v-if="tankAbw" class="card-footer text-muted">
+                        <div v-if="tankAbw > 0" class="card-footer text-muted">
                             {{ tankAbw }}L
                         </div>
                     </div>
