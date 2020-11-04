@@ -98,7 +98,6 @@ void setup()
 
 	auto *wifiClass = new WifiServerClass(WiFi, *server, *settings, *sensorData, *context, *configurationService);
 
-
 	if (settings->wifiSsid == nullptr || settings->wifiSsid == "" || settings->wifiSsid == "null")
 	{
 		wifiClass->setupAccessPoint();

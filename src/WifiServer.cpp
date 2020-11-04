@@ -83,7 +83,7 @@ void WifiServerClass::configurePages()
     sprintf(data, "{ "
                   "\"tankSize\": %i, \"csvTimeFrameInSeconds\": %i, \"pushNotificationCode\": \"%s\","
                   "\"tempOfTheDayDeviation\": %.02f, \"tempOfTheDayNotificationDelayInSeconds\": %i, \"tempOfTheDay\": %.02f,"
-                  "\"wifiSsid\": %s, \"wifiPassword\": %s"
+                  "\"wifiSsid\": \"%s\", \"wifiPassword\": \"%s\""
                   "}",
             _settings.tankSize, _settings.csvTimeFrameInSeconds, _settings.pushNotificationCode,
             _context.tempOfTheDayDeviation, _context.tempOfTheDayNotificationDelayInSeconds, _context.tempOfTheDay,
