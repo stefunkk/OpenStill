@@ -35,17 +35,30 @@ void WifiServerClass::configurePages()
 
   _server.on("/data", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
-    sprintf(data, "{ ""\"shelf10\": %.02f, \"header\": %.02f, \"tank\": %.02f, \"water\": %.02f, \"heater\": %i }", 
-    _sensorData.shelf10, _sensorData.header, _sensorData.tank, _sensorData.water, _settings.percentagePower);
+    sprintf(data, "{ "
+      "\"shelf10\": %.02f, \"header\": %.02f, \"tank\": %.02f, \"water\": %.02f, \"heater\": %i, "
+      "\"tankAbw\": %.02f, \"headerAbv\": %.02f1 "
+    "}", 
+    _sensorData.shelf10, _sensorData.header, _sensorData.tank, _sensorData.water, _settings.percentagePower,
+    AlcoholCalculatorClass::calculateAlcoholVolumeByWashBoilingTemperature(_sensorData.tank, _settings.tankSize), AlcoholCalculatorClass::calculateAbvByHeadVapourTemperature(_sensorData.header));
     request->send(200, "application/json", data);
   });
 
   _server.on("/limitsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
-      "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i "
+      "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i, "
     "}", 
     _settings.shelf10TemperatureLimit, _settings.headerTemperatureLimit, _settings.tankTemperatureLimit, _settings.waterTemperatureLimit);
+    request->send(200, "application/json", data);
+  });
+
+  _server.on("/otherConfiguration", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    char data[1000];
+    sprintf(data, "{ "
+      "\"tankSize\": %i, \"csvTimeFrameInSeconds\": %i"
+    "}", 
+    _settings.tankSize, _settings.csvTimeFrameInSeconds);
     request->send(200, "application/json", data);
   });
 
@@ -162,14 +175,18 @@ void WifiServerClass::configureInputs()
         _settings.percentagePower = heatingPower;
       }
     }
-    // GET input2 value on <ESP_IP>/get?input2=<inputMessage>
     else if (request->hasParam(_tankSize))
     {
-      int tankSize = request->getParam(_heater)->value().toInt();
-      if (tankSize <= 100 && tankSize >= 0)
+      int tankSize = request->getParam(_tankSize)->value().toInt();
+      if (tankSize <= 500 && tankSize >= 0)
       {
         _settings.tankSize = tankSize;
       }
+    }
+    else if (request->hasParam(_csvTimeFrameInSeconds))
+    {
+      int csvTimeFrame = request->getParam(_csvTimeFrameInSeconds)->value().toInt();
+      _settings.csvTimeFrameInSeconds = csvTimeFrame;
     }
     else
     {

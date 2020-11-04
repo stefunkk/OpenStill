@@ -20,5 +20,5 @@ void StillDataTaskClass::exec()
 uint32_t StillDataTaskClass::timeOfNextCheck()
 {
     setTriggered(true);
-    return millisToMicros(5000);
+    return millisToMicros(_settings.csvTimeFrameInSeconds);
 }

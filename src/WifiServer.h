@@ -9,6 +9,7 @@
 #include "SensorData.h"
 #include "StillDataContext.h"
 #include "ConfigurationService.h"
+#include "AlcoholCalculator.h"
 
 class WifiServerClass
 {
@@ -25,6 +26,7 @@ private:
 	const char *_heater = "heater";
 	const char *_tankSize = "tankSize";
 	const char *_findSensors = "findSensors";
+	const char *_csvTimeFrameInSeconds = "csvTimeFrameInSeconds";
 
 	const char *_shelf10Device = "shelf10Device";
 	const char *_headerDevice = "headerDevice";
@@ -35,6 +37,7 @@ private:
 	const char *_headerTemperatureLimit = "headerTemperatureLimit";
 	const char *_tankTemperatureLimit = "tankTemperatureLimit";
 	const char *_waterTemperatureLimit = "waterTemperatureLimit";
+
 
 	ESP8266WiFiClass &_wifi;
 	AsyncWebServer &_server;

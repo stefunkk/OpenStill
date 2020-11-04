@@ -6,7 +6,6 @@
 #include "FileService.h"
 #include "StillDataContext.h"
 #include <TaskManagerIO.h>
-#include <Time.h>
 
 class StillDataTaskClass: public BaseEvent
 {
