@@ -1,18 +1,27 @@
-#ifndef __WIFISETTINGS_H__
-#define __WIFISETTINGS_H__
+#ifndef __SETTINGS_H__
+#define __SETTINGS_H__
+
 #include <Arduino.h>
 
 class SettingsClass
 {
 public:
-    String wifiSsid = "",
-     wifiPassword = "";
+    String wifiSsid = "";
+    String wifiPassword = "";
 
-    int relayPin = 0,
-	powerResolution = 0,
-	percentagePower = 0,
-	heaterTimeFrameInSeconds = 0,
-    tankSize = 0;
+    int relayPin = 0;
+	int powerResolution = 0;
+	int percentagePower = 0;
+	int heaterTimeFrameInSeconds = 0;
+    int tankSize = 0;
+    int csvTimeFrameInSeconds = 0;
+
+    int shelf10TemperatureLimit = 999;
+    int headerTemperatureLimit = 999;
+    int tankTemperatureLimit = 999;
+    int waterTemperatureLimit = 999;
+
+    bool saveCsv = false;
 };
 
-#endif // __WIFISETTINGS_H__
+#endif // __SETTINGS_H__

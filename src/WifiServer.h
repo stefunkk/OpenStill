@@ -26,10 +26,15 @@ private:
 	const char *_tankSize = "tankSize";
 	const char *_findSensors = "findSensors";
 
-	const char *_shelv10Device = "shelv10Device";
+	const char *_shelf10Device = "shelf10Device";
 	const char *_headerDevice = "headerDevice";
 	const char *_tankDevice = "tankDevice";
 	const char *_waterDevice = "waterDevice";
+
+	const char *_shelf10TemperatureLimit = "shelf10TemperatureLimit";
+	const char *_headerTemperatureLimit = "headerTemperatureLimit";
+	const char *_tankTemperatureLimit = "tankTemperatureLimit";
+	const char *_waterTemperatureLimit = "waterTemperatureLimit";
 
 	ESP8266WiFiClass &_wifi;
 	AsyncWebServer &_server;

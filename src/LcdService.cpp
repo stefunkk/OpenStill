@@ -30,7 +30,7 @@ void LcdServiceClass::printTemperatures(SensorDataClass &data)
 {
 	double temperatures[4] = {data.shelf10, data.header, data.tank, data.water};
 
-	String names[5] = { _context.shelv10Name.substring(0, 4), _context.headName.substring(0, 4), _context.tankName.substring(0, 4), _context.waterName.substring(0, 4)};
+	String names[5] = { _context.shelf10Name.substring(0, 4), _context.headName.substring(0, 4), _context.tankName.substring(0, 4), _context.waterName.substring(0, 4)};
 	for (int i = 0; i < 4; i++)
 	{
 		auto name = names[i].c_str();

@@ -1,5 +1,3 @@
-// SensorData.h
-
 #ifndef _SENSORDATA_h
 #define _SENSORDATA_h
 
@@ -11,8 +9,6 @@ class SensorDataClass
 	 double tank = 0;
 	 double water = 0;
 };
-
-extern SensorDataClass SensorData;
 
 #endif
 

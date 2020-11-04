@@ -14,6 +14,19 @@
         .configuration-container .form-control {
             margin-bottom: 10px;
         }
+
+        .row+.row {
+            margin-top: 1rem;
+        }
+
+        .range-slider {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .heater-input-submit {
+            margin-top: 1rem;
+        }
     </style>
 </head>
 
@@ -31,127 +44,198 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 
-    <div id="app" class="container py-5">
-        <div class="card-deck mb-4 text-center">
-            <div class="card mb-3 shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Półka (10)</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">{{ shelv10 }} <small class="text-muted">°C</small></h1>
+    <div id="app" class="container-fluid py-5">
+        <div class="row">
+            <div class="col">
+                <div class="card-deck mb-12 text-center">
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Półka (10)</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ shelf10 }} <small class="text-muted">°C</small></h1>
+                        </div>
+                    </div>
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Głowica</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ header }} <small class="text-muted">°C</small></h1>
+                        </div>
+                    </div>
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Zbiornik</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ tank }} <small class="text-muted">°C</small>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Woda</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">{{ water }} <small class="text-muted">°C</small>
+                            </h1>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="card mb-3 shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Głowica</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">{{ header }} <small class="text-muted">°C</small></h1>
-                </div>
-            </div>
-            <div class="card mb-3 shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Zbiornik</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">{{ tank }} <small class="text-muted">°C</small>
-                    </h1>
-                </div>
-            </div>
-            <div class="card mb-3 shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Woda</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">{{ water }} <small class="text-muted">°C</small>
-                    </h1>
-                </div>
-            </div>
-            <br />
-
-
-
         </div>
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">Grzałka</h4>
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Grzałka</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{ heater }} <small class="text-muted">%</small>
+                        </h1>
+                    </div>
+                    <input class="form-control heater-input" type="number" id="setHeater" v-model="setHeater">
+                    <input v-on:click="updateHeater" type="button" value="Ustaw"
+                        class="heater-input-submit form-control heater-input btn btn-primary btn-lg btn-block" />
+                    <input type="range" min="0" max="100" v-model="setHeater"
+                        class="form-control heater-input range-slider">
+        
+                </div>
             </div>
-            <div class="card-body">
-                <h1 class="card-title pricing-card-title">{{ heater }} <small class="text-muted">%</small>
-                </h1>
-            </div>
-            <input class="form-control heater-input" type="number" id="setHeater" v-model="setHeater">
-            <input v-on:click="updateHeater" type="button" value="Ustaw"
-                class="form-control heater-input btn btn-primary btn-lg btn-block" />
-            <input type="range" min="0" max="100" class="slider" v-model="setHeater"
-                class="form-control heater-input range-slider">
-
         </div>
+
+        
 
         <div>
             <canvas id="myChart" width="400" height="200"></canvas>
         </div>
 
-        <div class="configuration-container container" id="config">
-            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#sensor"
-                aria-expanded="false" aria-controls="sensor" v-on:click="refreshSensors">
-                Termometry
-            </button>
-            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#zmienne"
-                aria-expanded="false" aria-controls="zmienne">
-                Inne
-            </button>
-            </p>
+        <div class="configuration-container container-fluid" id="config">
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#sensor"
+                        aria-expanded="false" aria-controls="sensor" v-on:click="refreshSensors">
+                        Termometry
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
+                        data-target="#zmienne" aria-expanded="false" aria-controls="zmienne">
+                        Inne
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="collapse" id="sensor" data-parent="#config">
+                        <div class="card card-body">
+                            <div>
+                                <select v-model="shelf10Device" class="form-control form-control-lg">
+                                    <option disabled value="">10 Półka</option>
+                                    <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <select v-model="headerDevice" class="form-control form-control-lg">
+                                    <option disabled value="">Głowica</option>
+                                    <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <select v-model="tankDevice" class="form-control form-control-lg">
+                                    <option disabled value="">Zbiornik</option>
+                                    <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <select v-model="waterDevice" class="form-control form-control-lg">
+                                    <option disabled value="">Woda</option>
+                                    <option v-for="option in sensorOptions" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="">
+                                <input v-on:click="updateSensors" type="button" value="Ustaw"
+                                    class="form-control heater-input btn btn-primary btn-lg btn-block" />
+                            </div>
+                        </div>
 
-            <div class="collapse" id="sensor" data-parent="#config">
-                <div class="card card-body">
-                    <div>
-                        <select v-model="shelv10Device" class="form-control form-control-lg">
-                            <option disabled value="">10 Półka</option>
-                            <option v-for="option in sensorOptions" v-bind:value="option.value">
-                                {{ option.text }}
-                            </option>
-                        </select>
                     </div>
-                    <div>
-                        <select v-model="headerDevice" class="form-control form-control-lg">
-                            <option disabled value="">Głowica</option>
-                            <option v-for="option in sensorOptions" v-bind:value="option.value">
-                                {{ option.text }}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <select v-model="tankDevice" class="form-control form-control-lg">
-                            <option disabled value="">Zbiornik</option>
-                            <option v-for="option in sensorOptions" v-bind:value="option.value">
-                                {{ option.text }}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <select v-model="waterDevice" class="form-control form-control-lg">
-                            <option disabled value="">Woda</option>
-                            <option v-for="option in sensorOptions" v-bind:value="option.value">
-                                {{ option.text }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="">
-                        <input v-on:click="updateSensors" type="button" value="Ustaw"
-                            class="form-control heater-input btn btn-primary btn-lg btn-block" />
+                    </p>
+                    <div class="collapse" id="zmienne" data-parent="#config">
+                        <div class="card card-body container-fluid">
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-primary btn-lg" v-on:click="getCsv">Pobierz
+                                        CSV</button>
+                                    <button type="button" class="btn btn-link" v-on:click="clearCsv">Wyzeruj
+                                        CSV</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2>Limity</h2>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">10 Półka</span>
+                                        </div>
+                                        <input class="form-control" v-model="shelf10TemperatureLimit" type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setShelf10TemperatureLimit">Ustaw</button>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Głowica</span>
+                                        </div>
+                                        <input class="form-control" v-model="headerTemperatureLimit" type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setHeaderTemperatureLimit">Ustaw</button>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Zbiornik</span>
+                                        </div>
+                                        <input class="form-control" v-model="tankTemperatureLimit" type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setTankTemperatureLimit">Ustaw</button>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Woda</span>
+                                        </div>
+                                        <input class="form-control" v-model="waterTemperatureLimit" type="number">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="setWaterTemperatureLimit">Ustaw</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
             </div>
-            </p>
-            <div class="collapse" id="zmienne" data-parent="#config">
-                <div class="card card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-                    Nihil
-                    anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                </div>
-            </div>
+
+
+
         </div>
 
     </div>
@@ -232,27 +316,31 @@
         var app = new Vue({
             el: '#app',
             data: {
-                shelv10: 0,
+                shelf10: 0,
                 header: 0,
                 tank: 0,
                 water: 0,
                 heater: 0,
                 setHeater: "",
                 lastReadTime: 0,
-                shelv10Device: "",
+                shelf10Device: "",
                 headerDevice: "",
                 tankDevice: "",
                 waterDevice: "",
+                shelf10TemperatureLimit: 0,
+                headerTemperatureLimit: 0,
+                tankTemperatureLimit: 0,
+                waterTemperatureLimit: 0,
                 sensorOptions: []
 
             },
             mounted: function () {
                 this.interval = setInterval(() => {
                     axios
-                        .get('/data')
+                        .get('http://192.168.1.7/data')
                         .then(response => {
 
-                            this.shelv10 = response.data.shelf10;
+                            this.shelf10 = response.data.shelf10;
                             this.header = response.data.header;
                             this.tank = response.data.tank;
                             this.water = response.data.water;
@@ -265,7 +353,7 @@
                             var currentTime = (new Date()).getTime();
                             if (this.lastReadTime == 0 || (currentTime - this.lastReadTime) > 5000) {
                                 window.myLine.data.datasets[0].data.push({
-                                    x: new Date(), y: this.shelv10
+                                    x: new Date(), y: this.shelf10
                                 });
 
                                 window.myLine.data.datasets[1].data.push({
@@ -286,15 +374,16 @@
 
 
                             window.myLine.update();
-                        })
+                        });
                 }, 1000);
 
                 this.refreshSensors();
+                this.refreshLimits();
             },
             methods: {
                 updateHeater: function (event) {
                     axios
-                        .get('/set', {
+                        .get('http://192.168.1.7/set', {
                             params: {
                                 heater: this.setHeater
                             }
@@ -302,21 +391,79 @@
                 },
                 updateSensors: function (event) {
                     axios
-                        .get('/set', {
+                        .get('http://192.168.1.7/setDevices', {
                             params: {
-                                shelv10Device: this.shelv10Device,
+                                shelf10Device: this.shelf10Device,
                                 headerDevice: this.headerDevice,
                                 tankDevice: this.tankDevice,
-                                waterDevice: this.shelv10Device,
+                                waterDevice: this.waterDevice,
+                            }
+                        })
+                },
+                setShelf10TemperatureLimit: function (event) {
+                    axios
+                        .get('http://192.168.1.7/setLimits', {
+                            params: {
+                                shelf10TemperatureLimit: this.shelf10TemperatureLimit
+                            }
+                        })
+                },
+                setHeaderTemperatureLimit: function (event) {
+                    axios
+                        .get('http://192.168.1.7/setLimits', {
+                            params: {
+                                headerTemperatureLimit: this.headerTemperatureLimit
+                            }
+                        })
+                },
+                setTankTemperatureLimit: function (event) {
+                    axios
+                        .get('http://192.168.1.7/setLimits', {
+                            params: {
+                                tankTemperatureLimit: this.tankTemperatureLimit
+                            }
+                        })
+                },
+                setWaterTemperatureLimit: function (event) {
+                    axios
+                        .get('http://192.168.1.7/setLimits', {
+                            params: {
+                                waterTemperatureLimit: this.waterTemperatureLimit
                             }
                         })
                 },
                 refreshSensors: function (event) {
                     axios
-                        .get('/sensors')
+                        .get('http://192.168.1.7/sensors')
                         .then(response => {
                             this.sensorOptions = response.data;
                         });
+                },
+                refreshLimits: function (event) {
+                    axios
+                        .get('http://192.168.1.7/limitsData')
+                        .then(response => {
+                            this.shelf10TemperatureLimit = response.data.shelf10TemperatureLimit;
+                            this.headerTemperatureLimit = response.data.headerTemperatureLimit;
+                            this.tankTemperatureLimit = response.data.tankTemperatureLimit;
+                            this.waterTemperatureLimit = response.data.waterTemperatureLimit;
+                        });
+                },
+                getLimit: function (event) {
+                    axios
+                        .get('http://192.168.1.7/sensors')
+                        .then(response => {
+                            this.sensorOptions = response.data;
+                        });
+                },
+                clearCsv: function (event) {
+                    if (confirm("Na pewno chcesz wyzerować plik?")) {
+                        axios
+                            .get('http://192.168.1.7/clearCsv');
+                    }
+                },
+                getCsv: function (event) {
+                    window.location.href = "/csv";
                 }
             }
         });

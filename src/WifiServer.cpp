@@ -27,9 +27,25 @@ void WifiServerClass::configurePages()
     request->send(SPIFFS, "/index.html", String(), false);
   });
 
+  _server.on("/csv", HTTP_GET, [](AsyncWebServerRequest *request) {
+    // auto response = request->beginResponse(200);
+    // response->addHeader("Content-Disposition","attachment;filename=data.csv");
+    request->send(SPIFFS, "/data.csv", "text/html", false);
+  });
+
   _server.on("/data", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
-    sprintf(data, "{ \"shelf10\": %.02f, \"header\": %.02f, \"tank\": %.02f, \"water\": %.02f, \"heater\": %i }", _sensorData.shelf10, _sensorData.header, _sensorData.tank, _sensorData.water, _settings.percentagePower);
+    sprintf(data, "{ ""\"shelf10\": %.02f, \"header\": %.02f, \"tank\": %.02f, \"water\": %.02f, \"heater\": %i }", 
+    _sensorData.shelf10, _sensorData.header, _sensorData.tank, _sensorData.water, _settings.percentagePower);
+    request->send(200, "application/json", data);
+  });
+
+  _server.on("/limitsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    char data[1000];
+    sprintf(data, "{ "
+      "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i "
+    "}", 
+    _settings.shelf10TemperatureLimit, _settings.headerTemperatureLimit, _settings.tankTemperatureLimit, _settings.waterTemperatureLimit);
     request->send(200, "application/json", data);
   });
 
@@ -76,6 +92,67 @@ void WifiServerClass::UpdateDeviceAddress(String indexString, DeviceAddress &add
 
 void WifiServerClass::configureInputs()
 {
+  _server.on("/clearCsv", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    _context.clearCsv = true;
+    request->send(200, "text/html");
+  });
+
+  _server.on("/setDevices", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    if (request->hasParam(_shelf10Device))
+    {
+      auto deviceIndex = request->getParam(_shelf10Device)->value();
+      UpdateDeviceAddress(deviceIndex, _context.shelf10Address);
+    }
+    if (request->hasParam(_headerDevice))
+    {
+      auto deviceIndex = request->getParam(_headerDevice)->value();
+      UpdateDeviceAddress(deviceIndex, _context.headAddress);
+    }
+    if (request->hasParam(_tankDevice))
+    {
+      auto deviceIndex = request->getParam(_tankDevice)->value();
+      UpdateDeviceAddress(deviceIndex, _context.tankAddress);
+    }
+    if (request->hasParam(_waterDevice))
+    {
+      auto deviceIndex = request->getParam(_waterDevice)->value();
+      UpdateDeviceAddress(deviceIndex, _context.waterAddress);
+    }
+
+    _configurationService.saveConfiguration();
+
+    request->send(200, "text/html");
+    return;
+  });
+
+  _server.on("/setLimits", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    if (request->hasParam(_shelf10TemperatureLimit))
+    {
+      int temperatureLimit = request->getParam(_shelf10TemperatureLimit)->value().toInt();
+      _settings.shelf10TemperatureLimit = temperatureLimit;
+    }
+    if (request->hasParam(_headerTemperatureLimit))
+    {
+      int temperatureLimit = request->getParam(_headerTemperatureLimit)->value().toInt();
+      _settings.headerTemperatureLimit = temperatureLimit;
+    }
+    if (request->hasParam(_tankTemperatureLimit))
+    {
+      int temperatureLimit = request->getParam(_tankTemperatureLimit)->value().toInt();
+      _settings.tankTemperatureLimit = temperatureLimit;
+    }
+    if (request->hasParam(_waterTemperatureLimit))
+    {
+      int temperatureLimit = request->getParam(_waterTemperatureLimit)->value().toInt();
+      _settings.waterTemperatureLimit = temperatureLimit;
+    }
+    
+    _configurationService.saveConfiguration();
+
+    request->send(200, "text/html");
+    return;
+  });
+
   _server.on("/set", HTTP_GET, [this](AsyncWebServerRequest *request) {
     if (request->hasParam(_heater))
     {
@@ -92,29 +169,6 @@ void WifiServerClass::configureInputs()
       if (tankSize <= 100 && tankSize >= 0)
       {
         _settings.tankSize = tankSize;
-      }
-    }
-    else if (request->hasParam(_shelv10Device) || request->hasParam(_headerDevice) || request->hasParam(_tankDevice) || request->hasParam(_waterDevice))
-    {
-      if (request->hasParam(_shelv10Device))
-      {
-        auto deviceIndex = request->getParam(_shelv10Device)->value();
-        UpdateDeviceAddress(deviceIndex, _context.shelv10Address);
-      }
-      if (request->hasParam(_headerDevice))
-      {
-        auto deviceIndex = request->getParam(_headerDevice)->value();
-        UpdateDeviceAddress(deviceIndex, _context.headAddress);
-      }
-      if (request->hasParam(_tankDevice))
-      {
-        auto deviceIndex = request->getParam(_tankDevice)->value();
-        UpdateDeviceAddress(deviceIndex, _context.tankAddress);
-      }
-      if (request->hasParam(_waterDevice))
-      {
-        auto deviceIndex = request->getParam(_waterDevice)->value();
-        UpdateDeviceAddress(deviceIndex, _context.waterAddress);
       }
     }
     else
