@@ -27,16 +27,21 @@ void ConfigurationServiceClass::loadConfiguration()
     _settings.heaterTimeFrameInSeconds = doc["heaterTimeFrameInSeconds"];
     _settings.tankSize = doc["tankSize"];
     _settings.csvTimeFrameInSeconds = doc["csvTimeFrameInSeconds"];
-    
+
     _settings.shelf10TemperatureLimit = doc["shelf10TemperatureLimit"];
     _settings.headerTemperatureLimit = doc["headerTemperatureLimit"];
     _settings.tankTemperatureLimit = doc["tankTemperatureLimit"];
     _settings.waterTemperatureLimit = doc["waterTemperatureLimit"];
+
+    _settings.shelf10TemperatureNotification = doc["shelf10TemperatureNotification"];
+    _settings.headerTemperatureNotification = doc["headerTemperatureNotification"];
+    _settings.tankTemperatureNotification = doc["tankTemperatureNotification"];
+    _settings.waterTemperatureNotification = doc["waterTemperatureNotification"];
+
     _settings.wifiSsid = doc["wifiSsid"].as<String>();
     _settings.wifiPassword = doc["wifiPassword"].as<String>();
 
     strlcpy(_settings.pushNotificationCode, doc["pushNotificationCode"], sizeof(_settings.pushNotificationCode));
-
 
     readArray("shelf10Address", doc, _context.shelf10Address);
     readArray("headAddress", doc, _context.headAddress);
@@ -44,7 +49,7 @@ void ConfigurationServiceClass::loadConfiguration()
     readArray("waterAddress", doc, _context.waterAddress);
 }
 
-void ConfigurationServiceClass::readArray(String key, JsonDocument& doc, DeviceAddress& deviceAddress)
+void ConfigurationServiceClass::readArray(String key, JsonDocument &doc, DeviceAddress &deviceAddress)
 {
     for (int i = 0; i < 8; i++)
     {
@@ -68,6 +73,12 @@ void ConfigurationServiceClass::saveConfiguration()
     doc["headerTemperatureLimit"] = _settings.headerTemperatureLimit;
     doc["tankTemperatureLimit"] = _settings.tankTemperatureLimit;
     doc["waterTemperatureLimit"] = _settings.waterTemperatureLimit;
+
+    doc["shelf10TemperatureNotification"] = _settings.shelf10TemperatureNotification;
+    doc["headerTemperatureNotification"] = _settings.headerTemperatureNotification;
+    doc["tankTemperatureNotification"] = _settings.tankTemperatureNotification;
+    doc["waterTemperatureNotification"] = _settings.waterTemperatureNotification;
+
     doc["wifiSsid"] = _settings.wifiSsid;
     doc["wifiPassword"] = _settings.wifiPassword;
 

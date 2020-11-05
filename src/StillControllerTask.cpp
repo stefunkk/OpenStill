@@ -8,6 +8,7 @@ void StillControllerTaskClass::exec()
 {
 	checkTemperatureLimit();
 	checkTempOfTheDay();
+	checkTempNotifications();
 }
 
 void StillControllerTaskClass::checkTemperatureLimit()
@@ -34,6 +35,30 @@ uint32_t StillControllerTaskClass::timeOfNextCheck()
 {
 	setTriggered(true);
 	return millisToMicros(5000);
+}
+
+void StillControllerTaskClass::checkTempNotifications() 
+{
+	if (_sensorData.shelf10 > _settings.shelf10TemperatureNotification && !_context.shelf10TemperatureNotificationSent)
+	{
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura 10 półki osiągnięta.");
+		_context.shelf10TemperatureNotificationSent = true;
+	}
+	if (_sensorData.header > _settings.headerTemperatureNotification && !_context.headerTemperatureNotificationSent)
+	{
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura głowicy osiągnięta.");
+		_context.headerTemperatureNotificationSent = true;
+	}
+	if (_sensorData.tank > _settings.tankTemperatureNotification && !_context.tankTemperatureNotificationSent)
+	{
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura zbiornika osiągnięta.");
+		_context.tankTemperatureNotificationSent = true;
+	}
+	if (_sensorData.water > _settings.waterTemperatureNotification && !_context.waterTemperatureNotificationSent)
+	{
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura wody osiągnięta.");
+		_context.waterTemperatureNotificationSent = true;
+	}
 }
 
 void StillControllerTaskClass::checkTempOfTheDay()

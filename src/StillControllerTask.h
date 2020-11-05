@@ -18,6 +18,7 @@ private:
 	SettingsClass &_settings;
 	StillDataContextClass &_context;
 
+	void checkTempNotifications();
 	void checkTempOfTheDay();
 	void checkTemperatureLimit();
 	bool isTemperatureLimitReached();

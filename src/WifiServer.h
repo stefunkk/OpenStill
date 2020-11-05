@@ -48,6 +48,11 @@ private:
 	const char *_tankTemperatureLimit = "tankTemperatureLimit";
 	const char *_waterTemperatureLimit = "waterTemperatureLimit";
 
+	const char *_shelf10TemperatureNotification = "shelf10TemperatureNotification";
+	const char *_headerTemperatureNotification = "headerTemperatureNotification";
+	const char *_tankTemperatureNotification = "tankTemperatureNotification";
+	const char *_waterTemperatureNotification = "waterTemperatureNotification";
+
 
 	ESP8266WiFiClass &_wifi;
 	AsyncWebServer &_server;

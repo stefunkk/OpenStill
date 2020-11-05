@@ -13,9 +13,6 @@ void WifiServerClass::connectToWifi()
   _wifi.mode(WIFI_STA);
   _wifi.begin(_settings.wifiSsid, _settings.wifiPassword);
 
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-  
   _server.begin();
 
   Serial.println();
@@ -28,7 +25,6 @@ void WifiServerClass::setupAccessPoint()
 {
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
-  delay(100);
 
   IPAddress localIp(192, 168, 4, 1);
   IPAddress gateway(192, 168, 4, 1);
@@ -75,6 +71,15 @@ void WifiServerClass::configurePages()
                   "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i "
                   "}",
             _settings.shelf10TemperatureLimit, _settings.headerTemperatureLimit, _settings.tankTemperatureLimit, _settings.waterTemperatureLimit);
+    request->send(200, "application/json", data);
+  });
+
+   _server.on("/notificationsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    char data[1000];
+    sprintf(data, "{ "
+                  "\"shelf10TemperatureNotification\": %i, \"headerTemperatureNotification\": %i, \"tankTemperatureNotification\": %i, \"waterTemperatureNotification\": %i "
+                  "}",
+            _settings.shelf10TemperatureNotification, _settings.headerTemperatureNotification, _settings.tankTemperatureNotification, _settings.waterTemperatureNotification);
     request->send(200, "application/json", data);
   });
 
@@ -192,6 +197,40 @@ void WifiServerClass::configureInputs()
     {
       int temperatureLimit = request->getParam(_waterTemperatureLimit)->value().toInt();
       _settings.waterTemperatureLimit = temperatureLimit;
+    }
+
+    _configurationService.saveConfiguration();
+
+    request->send(200, "text/html");
+    return;
+  });
+
+    _server.on("/setNotifications", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    if (request->hasParam(_shelf10TemperatureNotification))
+    {
+      int temperatureNotification = request->getParam(_shelf10TemperatureNotification)->value().toInt();
+      _settings.shelf10TemperatureNotification = temperatureNotification;
+      _context.shelf10TemperatureNotificationSent = false;
+    }
+    if (request->hasParam(_headerTemperatureNotification))
+    {
+      int temperatureNotification = request->getParam(_headerTemperatureNotification)->value().toInt();
+      _settings.headerTemperatureNotification = temperatureNotification;
+      _context.headerTemperatureNotificationSent = false;
+
+    }
+    if (request->hasParam(_tankTemperatureNotification))
+    {
+      int temperatureNotification = request->getParam(_tankTemperatureNotification)->value().toInt();
+      _settings.tankTemperatureNotification = temperatureNotification;
+      _context.tankTemperatureNotificationSent = false;
+
+    }
+    if (request->hasParam(_waterTemperatureNotification))
+    {
+      int temperatureNotification = request->getParam(_waterTemperatureNotification)->value().toInt();
+      _settings.waterTemperatureNotification = temperatureNotification;
+      _context.waterTemperatureNotificationSent = false;
     }
 
     _configurationService.saveConfiguration();

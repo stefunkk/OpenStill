@@ -23,6 +23,11 @@ public:
     int tankTemperatureLimit = 999;
     int waterTemperatureLimit = 999;
 
+    int shelf10TemperatureNotification = 999;
+    int headerTemperatureNotification = 999;
+    int tankTemperatureNotification = 999;
+    int waterTemperatureNotification = 999;
+
     bool saveCsv = false;
 };
 

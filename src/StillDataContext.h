@@ -28,6 +28,11 @@ public:
     bool clearCsv = false;
     DeviceAddress foundDevices[4] = {};
     String foundDeviceString[4] = {};
+
+    bool shelf10TemperatureNotificationSent = false;
+    bool headerTemperatureNotificationSent = false;
+    bool tankTemperatureNotificationSent = false;
+    bool waterTemperatureNotificationSent = false;
 };
 
 
