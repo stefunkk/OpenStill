@@ -41,22 +41,22 @@ void StillControllerTaskClass::checkTempNotifications()
 {
 	if (_sensorData.shelf10 > _settings.shelf10TemperatureNotification && !_context.shelf10TemperatureNotificationSent)
 	{
-		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura 10 półki osiągnięta.");
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura 10 półki (" + String(_settings.shelf10TemperatureNotification)  + "*C) osiągnięta.");
 		_context.shelf10TemperatureNotificationSent = true;
 	}
 	if (_sensorData.header > _settings.headerTemperatureNotification && !_context.headerTemperatureNotificationSent)
 	{
-		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura głowicy osiągnięta.");
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura głowicy (" + String(_settings.headerTemperatureNotification)  + "*C) osiągnięta.");
 		_context.headerTemperatureNotificationSent = true;
 	}
 	if (_sensorData.tank > _settings.tankTemperatureNotification && !_context.tankTemperatureNotificationSent)
 	{
-		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura zbiornika osiągnięta.");
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura zbiornika (" + String(_settings.tankTemperatureNotification)  + "*C) osiągnięta.");
 		_context.tankTemperatureNotificationSent = true;
 	}
 	if (_sensorData.water > _settings.waterTemperatureNotification && !_context.waterTemperatureNotificationSent)
 	{
-		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura wody osiągnięta.");
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura wody (" + String(_settings.waterTemperatureNotification)  + "*C) osiągnięta.");
 		_context.waterTemperatureNotificationSent = true;
 	}
 }

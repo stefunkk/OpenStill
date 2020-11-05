@@ -96,7 +96,7 @@ void ConfigurationServiceClass::saveConfiguration()
     {
         Serial.println(F("Failed to write to file"));
     }
-
+    
     _fileService.saveFile(_fileName, content);
 }
 

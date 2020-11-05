@@ -60,32 +60,35 @@
         <form v-if="false" action="/set" method="get">
             <label for="wifiSsid">Wifi SSID</label>
             <input type="text" name="wifiSsid"><br /><br />
-            <label for="wifiPassword">Wifi SSID</label>
+            <label for="wifiPassword">Wifi Pass</label>
             <input type="text" name="wifiPassword"><br /><br />
-            <input type="submit" value="Ustaw">
+            <input type="submit" value="Ok">
         </form>
         <div class="container-fluid" v-cloak>
             <div class="row">
                 <div class="col">
                     <nav class="navbar navbar-expand-lg navbar-light bg-light">
                         <a class="navbar-brand" href="#">OpenStill</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                          <span class="navbar-toggler-icon"></span>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                          <ul class="navbar-nav  dropdown-menu-right">
-                            <li class="nav-item dropdown ">
-                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ $t("language") }}
-                              </a>
-                              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="#" v-on:click="pl">pl</a>
-                                <a class="dropdown-item" href="#" v-on:click="en">en</a>
-                              </div>
-                            </li>
-                          </ul>
+                            <ul class="navbar-nav  dropdown-menu-right">
+                                <li class="nav-item dropdown ">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ $t("language") }}
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" href="#" v-on:click="pl">pl</a>
+                                        <a class="dropdown-item" href="#" v-on:click="en">en</a>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                      </nav>
+                    </nav>
                 </div>
 
 
@@ -213,7 +216,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <select v-model="shelf10Device" class="form-control form-control-lg">
-                                            <option disabled value="">10 Półka</option>
+                                            <option disabled value="">{{ $t("shelf") }}</option>
                                             <option v-for="option in sensorOptions" v-bind:value="option.value">
                                                 {{ option.text }}
                                             </option>
@@ -223,7 +226,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <select v-model="headerDevice" class="form-control form-control-lg">
-                                            <option disabled value="">Głowica</option>
+                                            <option disabled value="">{{ $t("header") }}</option>
                                             <option v-for="option in sensorOptions" v-bind:value="option.value">
                                                 {{ option.text }}
                                             </option>
@@ -233,7 +236,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <select v-model="tankDevice" class="form-control form-control-lg">
-                                            <option disabled value="">Zbiornik</option>
+                                            <option disabled value="">{{ $t("tank") }}</option>
                                             <option v-for="option in sensorOptions" v-bind:value="option.value">
                                                 {{ option.text }}
                                             </option>
@@ -243,7 +246,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <select v-model="waterDevice" class="form-control form-control-lg">
-                                            <option disabled value="">Woda</option>
+                                            <option disabled value="">{{ $t("water") }}</option>
                                             <option v-for="option in sensorOptions" v-bind:value="option.value">
                                                 {{ option.text }}
                                             </option>
@@ -252,7 +255,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input v-on:click="updateSensors" type="button" value="Ustaw"
+                                        <input v-on:click="updateSensors" type="button" :value="$t('set')"
                                             class="form-control heater-input btn btn-primary btn-lg btn-block" />
                                     </div>
                                 </div>
@@ -266,7 +269,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("shelf") }}</span>
@@ -274,7 +277,7 @@
                                             <input class="form-control" v-model="shelf10TemperatureLimit" type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
-                                                    v-on:click="setShelf10TemperatureLimit">Ustaw</button>
+                                                    v-on:click="setShelf10TemperatureLimit">{{ $t("set") }}</button>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
@@ -284,7 +287,7 @@
                                             <input class="form-control" v-model="headerTemperatureLimit" type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
-                                                    v-on:click="setHeaderTemperatureLimit">Ustaw</button>
+                                                    v-on:click="setHeaderTemperatureLimit">{{ $t("set") }}</button>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
@@ -294,7 +297,7 @@
                                             <input class="form-control" v-model="tankTemperatureLimit" type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
-                                                    v-on:click="setTankTemperatureLimit">Ustaw</button>
+                                                    v-on:click="setTankTemperatureLimit">{{ $t("set") }}</button>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
@@ -317,42 +320,46 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("shelf") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="shelf10TemperatureNotification" type="number">
+                                            <input class="form-control" v-model="shelf10TemperatureNotification"
+                                                type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
-                                                    v-on:click="setShelf10TemperatureNotification">Ustaw</button>
+                                                    v-on:click="setShelf10TemperatureNotification">{{ $t("set") }}</button>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("header") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="headerTemperatureNotification" type="number">
+                                            <input class="form-control" v-model="headerTemperatureNotification"
+                                                type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
-                                                    v-on:click="setHeaderTemperatureNotification">Ustaw</button>
+                                                    v-on:click="setHeaderTemperatureNotification">{{ $t("set") }}</button>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("tank") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="tankTemperatureNotification" type="number">
+                                            <input class="form-control" v-model="tankTemperatureNotification"
+                                                type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
-                                                    v-on:click="setTankTemperatureNotification">Ustaw</button>
+                                                    v-on:click="setTankTemperatureNotification">{{ $t("set") }}</button>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("water") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="waterTemperatureNotification" type="number">
+                                            <input class="form-control" v-model="waterTemperatureNotification"
+                                                type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     v-on:click="setWaterTemperatureNotification">{{ $t("set") }}</button>
@@ -367,40 +374,41 @@
                             <div class="card card-body container-fluid">
 
                                 <div class="row">
-                                    <div class="input-group col-md-3">
+                                    <div class="input-group col-md-4">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Temperatura dnia (10P)</span>
+                                            <span class="input-group-text">{{ $t("tempOfTheDay") }}</span>
                                         </div>
                                         <input class="form-control" v-model="tempOfTheDay" type="number">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setTempOfTheDay">Ustaw</button>
+                                                v-on:click="setTempOfTheDay">{{ $t("set") }}</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="input-group col-md-3">
+                                    <div class="input-group col-md-4">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Bezpieczna odchyłka</span>
+                                            <span class="input-group-text">{{ $t("tempOfTheDayDeviation") }}</span>
                                         </div>
                                         <input class="form-control" v-model="tempOfTheDayDeviation" type="number">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setTempOfTheDayDeviation">Ustaw</button>
+                                                v-on:click="setTempOfTheDayDeviation">{{ $t("set") }}</button>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="input-group col-md-3">
+                                    <div class="input-group col-md-4">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Częstotliwość powiadomień (s)</span>
+                                            <span
+                                                class="input-group-text">{{ $t("tempOfTheDayNotificationDelay") }}</span>
                                         </div>
                                         <input class="form-control" v-model="tempOfTheDayNotificationDelayInSeconds"
                                             type="number">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setTempOfTheDayNotificationDelayInSeconds">Ustaw</button>
+                                                v-on:click="setTempOfTheDayNotificationDelayInSeconds">{{ $t("set") }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -428,7 +436,7 @@
                                         <input class="form-control" v-model="tankSize" type="number">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setTankSize">Ustaw</button>
+                                                v-on:click="setTankSize">{{ $t("set") }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -441,7 +449,7 @@
                                         <input class="form-control" v-model="csvTimeFrameInSeconds" type="number">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setCsvTimeFrameInSeconds">Ustaw</button>
+                                                v-on:click="setCsvTimeFrameInSeconds">{{ $t("set") }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -454,7 +462,7 @@
                                         <input class="form-control" v-model="wifiSsid" type="text">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setWifiSsid">Ustaw</button>
+                                                v-on:click="setWifiSsid">{{ $t("set") }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -462,29 +470,31 @@
                                 <div class="row">
                                     <div class="input-group col-md-6">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Wifi hasło</span>
+                                            <span class="input-group-text">{{ $t("wifiPassword") }}</span>
                                         </div>
                                         <input class="form-control" v-model="wifiPassword" type="text">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setWifiPassword">Ustaw</button>
+                                                v-on:click="setWifiPassword">{{ $t("set") }}</button>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="input-group col-md-6">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Kod Push</span>
-                                        </div>
+                                        <a href="https://pushme.now.sh/">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">{{ $t("pushCode") }}</span>
+                                            </div>
+                                        </a>
                                         <input class="form-control" v-model="pushNotificationCode" type="text">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button"
-                                                v-on:click="setPushNotificationCode">Ustaw</button>
+                                                v-on:click="setPushNotificationCode">{{ $t("set") }}</button>
                                         </div>
                                         <div class="ml-2">
                                             <button class="btn btn-secondary" type="button"
-                                                v-on:click="testPushNotificationCode">Test</button>
+                                                v-on:click="testPushNotificationCode">{{ $t("test") }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -519,7 +529,13 @@
                     water: 'Water',
                     heater: "Heater",
                     set: "Set",
-                    notifications: "Notifications"
+                    notifications: "Notifications",
+                    wifiPassword: "Wifi password",
+                    pushCode: "Push code",
+                    test: "Test",
+                    tempOfTheDay: "Temp of the day (10 shelf)",
+                    tempOfTheDayDeviation: "Allowed deviation",
+                    tempOfTheDayNotificationDelay: "Notification delay (s)"
                 },
                 pl: {
                     language: 'Język',
@@ -529,7 +545,13 @@
                     water: 'Woda',
                     heater: "Grzałka",
                     set: "Ustaw",
-                    notifications: "Powiadomienia"
+                    notifications: "Powiadomienia",
+                    wifiPassword: "Hasło Wifi",
+                    pushCode: "Kod Push",
+                    test: "Test",
+                    tempOfTheDay: "Temperatura dnia (10P)",
+                    tempOfTheDayDeviation: "Dozwolona odchyłka",
+                    tempOfTheDayNotificationDelay: "Częstotliwość powiadomień (s)"
                 }
             }
         })
@@ -620,7 +642,7 @@
                 headerTemperatureLimit: 0,
                 tankTemperatureLimit: 0,
                 waterTemperatureLimit: 0,
-				shelf10TemperatureNotification: 0,
+                shelf10TemperatureNotification: 0,
                 headerTemperatureNotification: 0,
                 tankTemperatureNotification: 0,
                 waterTemperatureNotification: 0,
