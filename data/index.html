@@ -96,7 +96,7 @@
                     <div class="card-deck mb-12 text-center">
                         <div class="card mb-3 shadow-sm">
                             <div class="card-header">
-                                <h4 class="my-0 font-weight-normal">{{ $t("shelv") }}</h4>
+                                <h4 class="my-0 font-weight-normal">{{ $t("shelf") }}</h4>
                             </div>
                             <div class="card-body">
                                 <h1 class="card-title pricing-card-title">{{ shelf10 }} <small
@@ -458,7 +458,7 @@
             messages: {
                 en: {
                     language: 'Language',
-                    shelv: 'Shelv (10)',
+                    shelf: 'shelf (10)',
                     header: 'Header',
                     tank: 'Tank',
                     water: 'Water',
@@ -467,7 +467,7 @@
                 },
                 pl: {
                     language: 'Język',
-                    shelv: 'Półka (10)',
+                    shelf: 'Półka (10)',
                     header: 'Głowica',
                     tank: 'Zbiornik',
                     water: 'Woda',
@@ -484,25 +484,25 @@
             data: {
                 datasets: [
                     {
-                        label: "10 Półka",
+                        label: i18n.t('shelf'),
                         data: [],
                         fill: false,
                         borderColor: 'red'
                     },
                     {
-                        label: "Głowica",
+                        label: i18n.t('header'),
                         data: [],
                         fill: false,
                         borderColor: 'blue'
                     },
                     {
-                        label: "Zbiornik",
+                        label: i18n.t('tank'),
                         data: [],
                         fill: false,
                         borderColor: 'green'
                     },
                     {
-                        label: "Woda",
+                        label: i18n.t('water'),
                         data: [],
                         fill: false,
                         borderColor: 'black'
