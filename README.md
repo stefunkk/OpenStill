@@ -14,16 +14,15 @@ Project for controlling still. Developed for ESP8266 (but should work for other 
 * CSV data export with temperatures
 * Initial Wifi access point mode for wifi configuration
 * Web server with:
-** live temperatures (1s refresh)
-** heater control
-** live charts
-** notifications
-** heater off temperature limit
-** temperature of the day for 10 shelf notifications
-** sensor assignment
-** csv log download
-** csv reset
-
+  * live temperatures (1s refresh)
+  * heater control
+  * live charts
+  * notifications
+  * heater off temperature limit
+  * temperature of the day for 10 shelf notifications
+  * sensor assignment
+  * csv log download
+  * csv file reset
 
 ## Hardware
 
