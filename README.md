@@ -1,6 +1,6 @@
 # OpenStill
 
-Project for controlling still. Developed for ESP8266 (but should work for other devices). 
+Project for controlling still. Developed for ESP8266.
 
 
 ## Functions
