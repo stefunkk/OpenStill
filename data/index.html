@@ -580,52 +580,52 @@
             },
             mounted: function () {
                 this.interval = setInterval(() => {
-                    // axios
-                    //     .get('/data')
-                    //     .then(response => {
+                    axios
+                        .get('/data')
+                        .then(response => {
 
-                    //         this.shelf10 = response.data.shelf10;
-                    //         this.header = response.data.header;
-                    //         this.tank = response.data.tank;
-                    //         this.water = response.data.water;
-                    //         this.heater = response.data.heater;
-                    //         this.tankAbw = response.data.tankAbw;
-                    //         this.headerAbv = response.data.headerAbv;
+                            this.shelf10 = response.data.shelf10;
+                            this.header = response.data.header;
+                            this.tank = response.data.tank;
+                            this.water = response.data.water;
+                            this.heater = response.data.heater;
+                            this.tankAbw = response.data.tankAbw;
+                            this.headerAbv = response.data.headerAbv;
 
-                    //         if (!this.setHeater) {
-                    //             this.setHeater = this.heater
-                    //         }
+                            if (!this.setHeater) {
+                                this.setHeater = this.heater
+                            }
 
-                    //         var currentTime = (new Date()).getTime();
-                    //         if (this.lastReadTime == 0 || (currentTime - this.lastReadTime) > 5000) {
-                    //             window.myLine.data.datasets[0].data.push({
-                    //                 x: new Date(), y: this.shelf10
-                    //             });
+                            var currentTime = (new Date()).getTime();
+                            if (this.lastReadTime == 0 || (currentTime - this.lastReadTime) > 5000) {
+                                window.myLine.data.datasets[0].data.push({
+                                    x: new Date(), y: this.shelf10
+                                });
 
-                    //             window.myLine.data.datasets[1].data.push({
-                    //                 x: new Date(), y: this.header
-                    //             });
+                                window.myLine.data.datasets[1].data.push({
+                                    x: new Date(), y: this.header
+                                });
 
-                    //             window.myLine.data.datasets[2].data.push({
-                    //                 x: new Date(), y: this.tank
-                    //             });
+                                window.myLine.data.datasets[2].data.push({
+                                    x: new Date(), y: this.tank
+                                });
 
-                    //             window.myLine.data.datasets[3].data.push({
-                    //                 x: new Date(), y: this.water
-                    //             });
+                                window.myLine.data.datasets[3].data.push({
+                                    x: new Date(), y: this.water
+                                });
 
-                    //             this.lastReadTime = currentTime;
-                    //         }
+                                this.lastReadTime = currentTime;
+                            }
 
 
 
-                    //         window.myLine.update();
-                    //     });
+                            window.myLine.update();
+                        });
                 }, 1000);
 
-                // this.refreshOtherConfiguration();
-                // this.refreshSensors();
-                // this.refreshLimits();
+                this.refreshOtherConfiguration();
+                this.refreshSensors();
+                this.refreshLimits();
             },
             methods: {
                 updateHeater: function (event) {
