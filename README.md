@@ -10,9 +10,20 @@ Project for controlling still. Developed for ESP8266 (but should work for other 
 * Show if temperature is rising or dropping
 * Show ABV of vapour in head
 * Show amount of alcohol left in tank
-* Web server with information about temperatures, heater control and live charts
-* CSV data export with temperatures
 * Sensor temperature limit - turns off heater when temperature on sensor is reached
+* CSV data export with temperatures
+* Initial Wifi access point mode for wifi configuration
+* Web server with:
+** live temperatures (1s refresh)
+** heater control
+** live charts
+** notifications
+** heater off temperature limit
+** temperature of the day for 10 shelf notifications
+** sensor assignment
+** csv log download
+** csv reset
+
 
 ## Hardware
 
