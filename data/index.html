@@ -189,11 +189,11 @@
                         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
                             data-target="#sensor" aria-expanded="false" aria-controls="sensor"
                             v-on:click="refreshSensors">
-                            Termometry
+                            {{ $t("thermometers") }}
                         </button>
                         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
                             data-target="#limity" aria-expanded="false" aria-controls="limity">
-                            Limity
+                            {{ $t("limits") }}
                         </button>
                         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
                             data-target="#notifications" aria-expanded="false" aria-controls="notifications">
@@ -201,11 +201,11 @@
                         </button>
                         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
                             data-target="#temperaturaDnia" aria-expanded="false" aria-controls="temperaturaDnia">
-                            Temperatura dnia
+                            {{ $t("tempOfTheDay") }}
                         </button>
                         <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
                             data-target="#zmienne" aria-expanded="false" aria-controls="zmienne">
-                            Inne
+                            {{ $t("settings") }}
                         </button>
                     </div>
                 </div>
@@ -421,17 +421,17 @@
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <button type="button" class="btn btn-primary btn-lg" v-on:click="getCsv">Pobierz
-                                            CSV</button>
-                                        <button type="button" class="btn btn-link" v-on:click="clearCsv">Wyzeruj
-                                            CSV</button>
+                                        <button type="button" class="btn btn-primary btn-lg" v-on:click="getCsv">
+                                            {{ $t("getCsv") }}</button>
+                                        <button type="button" class="btn btn-link" v-on:click="clearCsv">
+                                            {{ $t("resetCsv") }}</button>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="input-group col-md-6">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Ilość wsadu (l)</span>
+                                            <span class="input-group-text"> {{ $t("tankSize") }} (l)</span>
                                         </div>
                                         <input class="form-control" v-model="tankSize" type="number">
                                         <div class="input-group-append">
@@ -444,7 +444,7 @@
                                 <div class="row">
                                     <div class="input-group col-md-6">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Przedział CSV (s)</span>
+                                            <span class="input-group-text"> {{ $t("csvTimeFrame") }}</span>
                                         </div>
                                         <input class="form-control" v-model="csvTimeFrameInSeconds" type="number">
                                         <div class="input-group-append">
@@ -457,7 +457,7 @@
                                 <div class="row">
                                     <div class="input-group col-md-6">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">WifI SSID</span>
+                                            <span class="input-group-text"> {{ $t("wifiSsid") }}</span>
                                         </div>
                                         <input class="form-control" v-model="wifiSsid" type="text">
                                         <div class="input-group-append">
@@ -523,7 +523,7 @@
             messages: {
                 en: {
                     language: 'Language',
-                    shelf: 'shelf (10)',
+                    shelf: 'Shelf (10)',
                     header: 'Header',
                     tank: 'Tank',
                     water: 'Water',
@@ -535,7 +535,15 @@
                     test: "Test",
                     tempOfTheDay: "Temp of the day (10 shelf)",
                     tempOfTheDayDeviation: "Allowed deviation",
-                    tempOfTheDayNotificationDelay: "Notification delay (s)"
+                    tempOfTheDayNotificationDelay: "Notification delay (s)",
+                    thermometers: "Thermometers",
+                    limits: "Limits",
+                    settings: "Settings",
+                    getCsv: "Get CSV",
+                    tankSize: "Tank load (L)",
+                    resetCsv: "Reset CSV",
+                    csvTimeFrame: "CSV time frame (s)",
+                    wifiSsid: "Wifi SSID"
                 },
                 pl: {
                     language: 'Język',
@@ -551,7 +559,15 @@
                     test: "Test",
                     tempOfTheDay: "Temperatura dnia (10P)",
                     tempOfTheDayDeviation: "Dozwolona odchyłka",
-                    tempOfTheDayNotificationDelay: "Częstotliwość powiadomień (s)"
+                    tempOfTheDayNotificationDelay: "Częstotliwość powiadomień (s)",
+                    thermometers: "Termometry",
+                    limits: "Limity",
+                    settings: "Ustawienia",
+                    getCsv: "Pobierz CSV",
+                    tankSize: "Ilość wsadu (L)",
+                    resetCsv: "Wyczyść CSV",
+                    csvTimeFrame: "Częstotliwość CSV (s)",
+                    wifiSsid: "Wifi nazwa"
                 }
             }
         })
