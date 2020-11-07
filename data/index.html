@@ -274,7 +274,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("shelf") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="shelf10TemperatureLimit" type="number">
+                                            <input class="form-control" v-model="shelf10TemperatureLimit" type="number" step="0.01">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     v-on:click="setShelf10TemperatureLimit">{{ $t("set") }}</button>
@@ -284,7 +284,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("header") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="headerTemperatureLimit" type="number">
+                                            <input class="form-control" v-model="headerTemperatureLimit" type="number" step="0.01">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     v-on:click="setHeaderTemperatureLimit">{{ $t("set") }}</button>
@@ -294,7 +294,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("tank") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="tankTemperatureLimit" type="number">
+                                            <input class="form-control" v-model="tankTemperatureLimit" type="number" step="0.01">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     v-on:click="setTankTemperatureLimit">{{ $t("set") }}</button>
@@ -304,7 +304,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("water") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="waterTemperatureLimit" type="number">
+                                            <input class="form-control" v-model="waterTemperatureLimit" type="number" step="0.01">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     v-on:click="setWaterTemperatureLimit">{{ $t("set") }}</button>
@@ -325,7 +325,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("shelf") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="shelf10TemperatureNotification"
+                                            <input class="form-control" v-model="shelf10TemperatureNotification" step="0.01"
                                                 type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
@@ -336,7 +336,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("header") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="headerTemperatureNotification"
+                                            <input class="form-control" v-model="headerTemperatureNotification" step="0.01"
                                                 type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
@@ -347,7 +347,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("tank") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="tankTemperatureNotification"
+                                            <input class="form-control" v-model="tankTemperatureNotification" step="0.01"
                                                 type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
@@ -358,7 +358,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">{{ $t("water") }}</span>
                                             </div>
-                                            <input class="form-control" v-model="waterTemperatureNotification"
+                                            <input class="form-control" v-model="waterTemperatureNotification" step="0.01"
                                                 type="number">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" type="button"
