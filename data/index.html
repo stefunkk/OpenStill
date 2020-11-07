@@ -697,6 +697,24 @@
 
                             var currentTime = (new Date()).getTime();
                             if (this.lastReadTime == 0 || (currentTime - this.lastReadTime) > 5000) {
+                                if (window.myLine.data.datasets[0].data.length > 100)
+                                {
+                                    window.myLine.data.datasets[0].data.shift()
+                                }
+                                if (window.myLine.data.datasets[1].data.length > 100)
+                                {
+                                    window.myLine.data.datasets[1].data.shift()
+                                }
+                                if (window.myLine.data.datasets[2].data.length > 100)
+                                {
+                                    window.myLine.data.datasets[2].data.shift()
+                                }
+                                if (window.myLine.data.datasets[3].data.length > 100)
+                                {
+                                    window.myLine.data.datasets[3].data.shift()
+                                }
+                                
+
                                 window.myLine.data.datasets[0].data.push({
                                     x: new Date(), y: this.shelf10
                                 });
