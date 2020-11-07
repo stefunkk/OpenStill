@@ -14,6 +14,8 @@ public:
 	LcdServiceClass(AlcoholCalculatorClass &alcoholCalculator, StillDataContextClass &context, float tankSize);
 	void printTrending(float temperature, int counter) const;
 	void printTemperatures(SensorDataClass &data);
+	void printIpAddress(String ip);
+	void reset();
 
 private:
 	void printHeadAbv(float temperature) const;

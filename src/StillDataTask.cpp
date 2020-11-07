@@ -13,7 +13,7 @@ void StillDataTaskClass::exec()
     }
 
     char csvEntry[300];
-    sprintf(csvEntry, "%f;%f;%f;%f;%i; %\n", _data.shelf10, _data.header, _data.tank, _data.water, _settings.percentagePower);
+    sprintf(csvEntry, "%.2f;%.2f;%.2f;%.2f;%i; %\n", _data.shelf10, _data.header, _data.tank, _data.water, _settings.percentagePower);
     _fileService.saveFile(_fileName, csvEntry);
 }
 

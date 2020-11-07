@@ -1,7 +1,7 @@
 #include "LcdTask.h"
 
-LcdTaskClass::LcdTaskClass(SensorDataClass& sensorData, LcdServiceClass& lcdService):
-	_sensorData(sensorData), _lcdService(lcdService)
+LcdTaskClass::LcdTaskClass(StillDataContextClass& context, SensorDataClass& sensorData, LcdServiceClass& lcdService):
+	_context(context), _sensorData(sensorData), _lcdService(lcdService)
 {
 }
 
@@ -13,6 +13,17 @@ uint32_t LcdTaskClass::timeOfNextCheck()
 
 void LcdTaskClass::exec()
 {
+	if (!_context.isIpShown && _context.ipAddress != ""){
+		_lcdService.printIpAddress(_context.ipAddress);
+		_context.isIpShown = true;
+		_shouldReset = true;
+		return;
+	}
+
+	if (_shouldReset){
+		_lcdService.reset();
+	}
+
 	_lcdService.printTemperatures(_sensorData);
 }
 

@@ -15,7 +15,12 @@ void WifiServerClass::connectToWifi()
 
   _server.begin();
 
-  Serial.println();
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+  }
+
+  _context.ipAddress = WiFi.localIP().toString();
 
   configurePages();
   configureInputs();
@@ -74,7 +79,7 @@ void WifiServerClass::configurePages()
     request->send(200, "application/json", data);
   });
 
-   _server.on("/notificationsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
+  _server.on("/notificationsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
                   "\"shelf10TemperatureNotification\": %i, \"headerTemperatureNotification\": %i, \"tankTemperatureNotification\": %i, \"waterTemperatureNotification\": %i "
@@ -205,7 +210,7 @@ void WifiServerClass::configureInputs()
     return;
   });
 
-    _server.on("/setNotifications", HTTP_GET, [this](AsyncWebServerRequest *request) {
+  _server.on("/setNotifications", HTTP_GET, [this](AsyncWebServerRequest *request) {
     if (request->hasParam(_shelf10TemperatureNotification))
     {
       int temperatureNotification = request->getParam(_shelf10TemperatureNotification)->value().toInt();
@@ -217,14 +222,12 @@ void WifiServerClass::configureInputs()
       int temperatureNotification = request->getParam(_headerTemperatureNotification)->value().toInt();
       _settings.headerTemperatureNotification = temperatureNotification;
       _context.headerTemperatureNotificationSent = false;
-
     }
     if (request->hasParam(_tankTemperatureNotification))
     {
       int temperatureNotification = request->getParam(_tankTemperatureNotification)->value().toInt();
       _settings.tankTemperatureNotification = temperatureNotification;
       _context.tankTemperatureNotificationSent = false;
-
     }
     if (request->hasParam(_waterTemperatureNotification))
     {

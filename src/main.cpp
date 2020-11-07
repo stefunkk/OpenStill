@@ -88,7 +88,7 @@ void setup()
 
 	auto *alcoholCalculator = new AlcoholCalculatorClass;
 	auto *lcdService = new LcdServiceClass(*alcoholCalculator, *context, tankSize);
-	static auto *lcdTask = new LcdTaskClass(*sensorData, *lcdService);
+	static auto *lcdTask = new LcdTaskClass(*context, *sensorData, *lcdService);
 
 	auto *stillDataTask = new StillDataTaskClass(*context, *fileService, *sensorData, *settings);
 

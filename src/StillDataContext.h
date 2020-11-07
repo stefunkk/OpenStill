@@ -33,6 +33,9 @@ public:
     bool headerTemperatureNotificationSent = false;
     bool tankTemperatureNotificationSent = false;
     bool waterTemperatureNotificationSent = false;
+
+    String ipAddress = "";
+    bool isIpShown = false;
 };
 
 

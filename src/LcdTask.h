@@ -5,17 +5,20 @@
 
 #include "SensorData.h"
 #include "LcdService.h"
+#include "StillDataContext.h"
 #include <TaskManagerIO.h>
 
 class LcdTaskClass: public BaseEvent
 {
  public:
-	LcdTaskClass(SensorDataClass& sensorData, LcdServiceClass& lcdService);
+	LcdTaskClass(StillDataContextClass& context, SensorDataClass& sensorData, LcdServiceClass& lcdService);
 	void exec() override;
 	uint32_t timeOfNextCheck() override;
  private:
 	 SensorDataClass& _sensorData;
 	 LcdServiceClass& _lcdService;
+	 StillDataContextClass& _context;
+	 bool _shouldReset;
 };
 
 #endif
