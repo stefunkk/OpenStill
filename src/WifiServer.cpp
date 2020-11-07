@@ -51,7 +51,7 @@ void WifiServerClass::configurePages()
   _server.on("/csv", HTTP_GET, [](AsyncWebServerRequest *request) {
     // auto response = request->beginResponse(200);
     // response->addHeader("Content-Disposition","attachment;filename=data.csv");
-    request->send(SPIFFS, "/data.csv", "text/html", false);
+    request->send(SPIFFS, "/data.csv", "text/csv", false);
   });
 
   _server.on("/data", HTTP_GET, [this](AsyncWebServerRequest *request) {
