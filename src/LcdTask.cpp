@@ -22,6 +22,7 @@ void LcdTaskClass::exec()
 
 	if (_shouldReset){
 		_lcdService.reset();
+		_shouldReset = false;
 	}
 
 	_lcdService.printTemperatures(_sensorData);
