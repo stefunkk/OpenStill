@@ -26,7 +26,7 @@ const int csvTimeFrameInSeconds = 30;
 const bool saveCsv = true;
 
 // Heater settings
-const uint8_t SsrPin = D4;
+const uint8_t SsrPin = D6;
 const int powerResolutions = 100;
 const int powerPercentage = 0;
 const int heaterTimeFrameInSeconds = 2;

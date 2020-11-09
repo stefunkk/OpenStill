@@ -45,12 +45,12 @@ void HeaterTaskClass::turnAndWait(int timeInMiliseconds, int state)
 	_waitTime = timeInMiliseconds;
 }
 
-int HeaterTaskClass::getHighTime() 
+int HeaterTaskClass::getLowTime() 
 {
 	return _settingsClass.percentagePower * _settingsClass.heaterTimeFrameInSeconds * 1000 / _settingsClass.powerResolution;
 }
 
-int HeaterTaskClass::getLowTime() 
+int HeaterTaskClass::getHighTime() 
 {
 	return (_settingsClass.powerResolution - _settingsClass.percentagePower) * _settingsClass.heaterTimeFrameInSeconds * 1000 / _settingsClass.powerResolution;
 }
