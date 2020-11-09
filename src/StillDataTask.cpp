@@ -12,8 +12,8 @@ void StillDataTaskClass::exec()
         _context.clearCsv = false;
     }
 
-    char csvEntry[300];
-    sprintf(csvEntry, "%.2f;%.2f;%.2f;%.2f;%i; %\n", millis()/1000 ,_data.shelf10, _data.header, _data.tank, _data.water, _settings.percentagePower);
+    char csvEntry[100];
+    sprintf(csvEntry, "%i;%.2f;%.2f;%.2f;%.2f;%i; %\n", (int)(millis()/1000) ,(float)_data.shelf10, (float)_data.header, (float)_data.tank, (float)_data.water, (int)_settings.percentagePower);
     _fileService.saveFile(_fileName, csvEntry);
 }
 
