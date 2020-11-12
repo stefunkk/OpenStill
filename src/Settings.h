@@ -9,7 +9,16 @@ public:
     String wifiSsid = "";
     String wifiPassword = "";
 
-    int relayPin = 0;
+    int relayPin1 = 0;
+    int relayPin2 = 0;
+    int relayPin3 = 0;
+
+    int heater2State = LOW;
+    bool heater2StateChanged = false;
+
+    bool heater3State = LOW;
+    bool heater3StateChanged = false;
+
 	int powerResolution = 0;
 	int percentagePower = 0;
 	int heaterTimeFrameInSeconds = 0;

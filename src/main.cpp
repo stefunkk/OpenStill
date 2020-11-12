@@ -26,7 +26,10 @@ const int csvTimeFrameInSeconds = 30;
 const bool saveCsv = true;
 
 // Heater settings
-const uint8_t SsrPin = D6;
+const uint8_t Heater1 = D6;
+const uint8_t Heater2 = D3;
+const uint8_t Heater3 = D5;
+
 const int powerResolutions = 100;
 const int powerPercentage = 0;
 const int heaterTimeFrameInSeconds = 2;
@@ -56,7 +59,9 @@ void setup()
 	auto *settings = new SettingsClass();
 	settings->wifiSsid = WifiSsid;
 	settings->wifiPassword = WifiPassword;
-	settings->relayPin = SsrPin;
+	settings->relayPin1 = Heater1;
+	settings->relayPin2 = Heater2;
+	settings->relayPin3 = Heater3;
 	settings->powerResolution = powerResolutions;
 	settings->percentagePower = powerPercentage;
 	settings->percentagePower = powerPercentage;

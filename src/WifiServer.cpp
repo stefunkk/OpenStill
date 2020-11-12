@@ -63,10 +63,12 @@ void WifiServerClass::configurePages()
     char data[1000];
     sprintf(data, "{ "
                   "\"shelf10\": %.02f, \"header\": %.02f, \"tank\": %.02f, \"water\": %.02f, \"heater\": %i, "
-                  "\"tankAbw\": %.02f, \"headerAbv\": %.02f1 "
+                  "\"tankAbw\": %.02f, \"headerAbv\": %.02f1, "
+                  "\"heater2\": %i, \"heater3\": %i"
                   "}",
             _sensorData.shelf10, _sensorData.header, _sensorData.tank, _sensorData.water, _settings.percentagePower,
-            AlcoholCalculatorClass::calculateAlcoholVolumeByWashBoilingTemperature(_sensorData.tank, _settings.tankSize), AlcoholCalculatorClass::calculateAbvByHeadVapourTemperature(_sensorData.header));
+            AlcoholCalculatorClass::calculateAlcoholVolumeByWashBoilingTemperature(_sensorData.tank, _settings.tankSize), AlcoholCalculatorClass::calculateAbvByHeadVapourTemperature(_sensorData.header),
+            _settings.heater2State, _settings.heater3State);
     request->send(200, "application/json", data);
   });
 
@@ -250,6 +252,18 @@ void WifiServerClass::configureInputs()
       {
         _settings.percentagePower = heatingPower;
       }
+    }
+    if (request->hasParam(_heater2))
+    {
+      int state = request->getParam(_heater2)->value().toInt();
+      _settings.heater2State = state > 0 ? HIGH : LOW;
+      _settings.heater2StateChanged = true;
+    }
+    if (request->hasParam(_heater3))
+    {
+      int state = request->getParam(_heater3)->value().toInt();
+      _settings.heater3State = state > 0 ? HIGH : LOW;
+      _settings.heater3StateChanged = true;
     }
     if (request->hasParam(_tankSize))
     {

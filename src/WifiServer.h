@@ -26,6 +26,8 @@ private:
 	void configureInputs();
 
 	const char *_heater = "heater";
+	const char *_heater2 = "heater2";
+	const char *_heater3 = "heater3";
 	const char *_tankSize = "tankSize";
 	const char *_findSensors = "findSensors";
 	const char *_csvTimeFrameInSeconds = "csvTimeFrameInSeconds";
