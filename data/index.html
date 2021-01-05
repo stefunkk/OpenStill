@@ -799,7 +799,7 @@
                             this.tankAbw = response.data.tankAbw;
                             this.headerAbv = response.data.headerAbv;
                             this.heater2State = response.data.heater2 > 0 ? true : false;
-                            this.heater3State = response.data.headerAbv > 0 ? true : false;
+                            this.heater3State = response.data.heater3 > 0 ? true : false;
 
                             if (!this.setHeater) {
                                 this.setHeater = this.heater
@@ -925,7 +925,6 @@
                         })
                 },
                 setHeater3: function (event) {
-                    console.log(this.heater3State);
                     axios
                         .get('/set', {
                             params: {
