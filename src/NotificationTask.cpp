@@ -25,7 +25,7 @@ uint32_t NotificationTaskClass::timeOfNextCheck()
 
 void NotificationTaskClass::sendNotification(String title, String message)
 {
-  const char *host = "pushme.now.sh";
+  const char *host = "pushme.vercel.app";
   const uint16_t port = 443;
   String path = "/api/sendNotification";
   Serial.println("Sending notification: " + message);
