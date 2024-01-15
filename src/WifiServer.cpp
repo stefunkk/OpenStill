@@ -1,7 +1,7 @@
 #include "WifiServer.h"
 
-WifiServerClass::WifiServerClass(ESP8266WiFiClass &wifi, AsyncWebServer &server, SettingsClass &wifiSettings,
-                                 SensorDataClass &sensorData, StillDataContextClass &context, ConfigurationServiceClass &configurationService) : _wifi(wifi), _server(server), _settings(wifiSettings), _sensorData(sensorData), _context(context), _configurationService(configurationService)
+WifiServerClass::WifiServerClass(AsyncWebServer &server, SettingsClass &wifiSettings,
+                                 SensorDataClass &sensorData, StillDataContextClass &context, ConfigurationServiceClass &configurationService) : _server(server), _settings(wifiSettings), _sensorData(sensorData), _context(context), _configurationService(configurationService)
 {
 
   DefaultHeaders::Instance().addHeader(F("Access-Control-Allow-Origin"), F("*"));
@@ -10,8 +10,9 @@ WifiServerClass::WifiServerClass(ESP8266WiFiClass &wifi, AsyncWebServer &server,
 
 void WifiServerClass::connectToWifi()
 {
-  _wifi.mode(WIFI_STA);
-  _wifi.begin(_settings.wifiSsid, _settings.wifiPassword);
+  WiFi.mode(WIFI_STA);
+  
+  WiFi.begin(_settings.wifiSsid.c_str(), _settings.wifiPassword.c_str());
 
   _server.begin();
 
@@ -21,6 +22,9 @@ void WifiServerClass::connectToWifi()
   }
 
   _context.ipAddress = WiFi.localIP().toString();
+
+  Serial.print("IP address: ");
+  Serial.print(_context.ipAddress);
 
   configurePages();
   configureInputs();
@@ -45,6 +49,13 @@ void WifiServerClass::setupAccessPoint()
 
   configurePages();
   configureInputs();
+}
+
+void WifiServerClass::configureAPPages()
+{
+  _server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/indexAP.html", String(), false);
+  });
 }
 
 void WifiServerClass::configurePages()

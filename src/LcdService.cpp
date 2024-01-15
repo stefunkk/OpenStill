@@ -22,7 +22,7 @@ LiquidCrystalI2C_RS_EN(lcd, LCD_ADDRESS, false)
 	_lcd.print("OpenStill");
 	createCustomCharacters();
 
-	_lcd.write(0);
+	_lcd.write(1);
 	_lcd.write(1);
 }
 

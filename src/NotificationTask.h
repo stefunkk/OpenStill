@@ -3,8 +3,8 @@
 
 #include "StillDataContext.h"
 #include "Settings.h"
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
+#include <WiFiClientSecure.h>
+#include <HTTPClient.h>
 #include <TaskManagerIO.h>
 
 class NotificationTaskClass : public BaseEvent
@@ -15,8 +15,8 @@ public:
     uint32_t timeOfNextCheck() override;
 
 private:
-    SettingsClass &_settings;
     StillDataContextClass &_context;
+    SettingsClass &_settings;
     void sendNotification(String title, String message);
 };
 #endif // __NOTIFICATIONTASK_H__

@@ -1,6 +1,5 @@
 #include "ConfigurationService.h"
 #include "StillDataContext.h"
-#include "WifiServer.h"
 #include "LcdTask.h"
 #include "SensorData.h"
 #include "AlcoholCalculator.h"
@@ -12,30 +11,30 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <ESPAsyncTCP.h>
+#include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include "FileService.h"
 #include "StillDataTask.h"
 #include "StillControllerTask.h"
 #include "NotificationTask.h"
+#include "WifiServer.h"
 
-// DS18B20 sensor settings
-const uint8_t sensorPin = D7;
+// // DS18B20 sensor settings
+const uint8_t sensorPin = GPIO_NUM_15;
 const int csvTimeFrameInSeconds = 30;
 const bool saveCsv = true;
 
-// Heater settings
-const uint8_t Heater1 = D6;
-const uint8_t Heater2 = D3;
-const uint8_t Heater3 = D5;
+// // Heater settings
+const uint8_t Heater1 = GPIO_NUM_23;
+const uint8_t Heater2 = GPIO_NUM_22;
+const uint8_t Heater3 = GPIO_NUM_1;
 
 const int powerResolutions = 100;
 const int powerPercentage = 0;
 const int heaterTimeFrameInSeconds = 2;
 const int tankSize = 50;
 
-// WIFI Settings
+// // WIFI Settings
 const String WifiSsid = "";
 const String WifiPassword = "";
 
@@ -101,14 +100,16 @@ void setup()
 
 	auto *notificationTask = new NotificationTaskClass(*context, *settings);
 
-	auto *wifiClass = new WifiServerClass(WiFi, *server, *settings, *sensorData, *context, *configurationService);
+	auto *wifiClass = new WifiServerClass(*server, *settings, *sensorData, *context, *configurationService);
 
 	if (settings->wifiSsid == nullptr || settings->wifiSsid == "" || settings->wifiSsid == "null")
 	{
+		Serial.print("Setting up access point");
 		wifiClass->setupAccessPoint();
 	}
 	else
 	{
+		Serial.print("Connecting to WiFi");
 		wifiClass->connectToWifi();
 	}
 

@@ -3,27 +3,31 @@
 #ifndef _WIFISERVERTASK_h
 #define _WIFISERVERTASK_h
 
-#include <ESP8266WiFi.h>
-#include <ESPAsyncWebServer.h>
+#include <Arduino.h>
 #include "Settings.h"
 #include "SensorData.h"
 #include "StillDataContext.h"
 #include "ConfigurationService.h"
 #include "AlcoholCalculator.h"
 #include "NotificationHelper.h"
+#include <WiFi.h>
+#include <ESPAsyncWebServer.h>
 
 class WifiServerClass
 {
 public:
-	WifiServerClass(ESP8266WiFiClass &wifi, AsyncWebServer &server, SettingsClass &wifiSettings, SensorDataClass &_sensorData,
+	WifiServerClass(AsyncWebServer &server, SettingsClass &wifiSettings, SensorDataClass &_sensorData,
 					StillDataContextClass &context, ConfigurationServiceClass &configurationService);
 	void connectToWifi();
 	void setupAccessPoint();
 
 
 private:
-	void configurePages();
-	void configureInputs();
+	AsyncWebServer &_server;
+	SettingsClass &_settings;
+	SensorDataClass &_sensorData;
+	StillDataContextClass &_context;
+	ConfigurationServiceClass &_configurationService;
 
 	const char *_heater = "heater";
 	const char *_heater2 = "heater2";
@@ -54,14 +58,12 @@ private:
 	const char *_headerTemperatureNotification = "headerTemperatureNotification";
 	const char *_tankTemperatureNotification = "tankTemperatureNotification";
 	const char *_waterTemperatureNotification = "waterTemperatureNotification";
+	
+	void configureAPPages();
+	void configurePages();
+	void configureInputs();
 
 
-	ESP8266WiFiClass &_wifi;
-	AsyncWebServer &_server;
-	SettingsClass &_settings;
-	SensorDataClass &_sensorData;
-	StillDataContextClass &_context;
-	ConfigurationServiceClass &_configurationService;
 
 	void UpdateDeviceAddress(String index, DeviceAddress &address);
 };

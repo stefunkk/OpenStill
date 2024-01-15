@@ -30,8 +30,10 @@ void NotificationTaskClass::sendNotification(String title, String message)
   String path = "/api/sendNotification";
   Serial.println("Sending notification: " + message);
 
-  BearSSL::WiFiClientSecure client;
+  WiFiClientSecure client;
   client.setInsecure();
+
+
   HTTPClient https;
 
   if (https.begin(client, host, port, path))

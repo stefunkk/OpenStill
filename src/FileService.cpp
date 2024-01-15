@@ -2,7 +2,10 @@
 
 FileServiceClass::FileServiceClass() : _fs(SPIFFS)
 {
-    _fs.begin();
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
 }
 
 String FileServiceClass::openFile(String path)

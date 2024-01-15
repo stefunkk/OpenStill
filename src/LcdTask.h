@@ -15,9 +15,9 @@ class LcdTaskClass: public BaseEvent
 	void exec() override;
 	uint32_t timeOfNextCheck() override;
  private:
+	 StillDataContextClass& _context;
 	 SensorDataClass& _sensorData;
 	 LcdServiceClass& _lcdService;
-	 StillDataContextClass& _context;
 	 bool _shouldReset;
 };
 

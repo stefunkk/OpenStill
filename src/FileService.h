@@ -1,8 +1,8 @@
 #ifndef __FILESERVICE_H__
 #define __FILESERVICE_H__
 
-#include <Arduino.h>
 #include <FS.h>
+#include <SPIFFS.h>
 
 class FileServiceClass
 {
