@@ -21,14 +21,14 @@
 #include "FlashDataHelper.h"
 
 // // DS18B20 sensor settings
-const uint8_t sensorPin = GPIO_NUM_15;
+const uint8_t sensorPin = GPIO_NUM_23;
 const int csvTimeFrameInSeconds = 30;
 const bool saveCsv = true;
 
 // // Heater settings
-const uint8_t Heater1 = GPIO_NUM_23;
-const uint8_t Heater2 = GPIO_NUM_22;
-const uint8_t Heater3 = GPIO_NUM_1;
+const uint8_t Heater1 = GPIO_NUM_19;
+const uint8_t Heater2 = GPIO_NUM_18;
+const uint8_t Heater3 = GPIO_NUM_5;
 
 const int powerResolutions = 100;
 const int powerPercentage = 0;
