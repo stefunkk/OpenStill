@@ -11,6 +11,7 @@ public:
     String openFile(String path);
     void saveFile(String path, String content);
     void removeFile(String path);
+    bool fileExists(String path);
 private:
     FS& _fs;
     bool _fileLock = false;

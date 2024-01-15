@@ -1,7 +1,8 @@
 #include "WifiServer.h"
 
 WifiServerClass::WifiServerClass(AsyncWebServer &server, SettingsClass &wifiSettings,
-                                 SensorDataClass &sensorData, StillDataContextClass &context, ConfigurationServiceClass &configurationService) : _server(server), _settings(wifiSettings), _sensorData(sensorData), _context(context), _configurationService(configurationService)
+                                 SensorDataClass &sensorData, StillDataContextClass &context, ConfigurationServiceClass &configurationService) 
+                                 : _server(server), _settings(wifiSettings), _sensorData(sensorData), _context(context), _configurationService(configurationService)
 {
 
   DefaultHeaders::Instance().addHeader(F("Access-Control-Allow-Origin"), F("*"));
@@ -47,14 +48,15 @@ void WifiServerClass::setupAccessPoint()
 
   _server.begin();
 
-  configurePages();
+  configureAPPages();
   configureInputs();
 }
 
 void WifiServerClass::configureAPPages()
 {
   _server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/indexAP.html", String(), false);
+    const char index_html[] PROGMEM = "<html> <head> <meta charset=\"UTF-8\"> </head> <body> <form v-if=\"false\" action=\"/set\" method=\"get\"> <label for=\"wifiSsid\">Wifi SSID</label> <input type=\"text\" name=\"wifiSsid\"><br /><br /> <label for=\"wifiPassword\">Wifi Pass</label> <input type=\"text\" name=\"wifiPassword\"><br /><br /> <input type=\"submit\" value=\"Ok\"> </form> </body> </html>";
+    request->send_P(200, "text/html", index_html);
   });
 }
 

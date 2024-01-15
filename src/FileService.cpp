@@ -22,6 +22,10 @@ String FileServiceClass::openFile(String path)
     {
         Serial.println(path);
         Serial.println(F("Failed to read configuration file - FS error or file missing."));
+
+        file.close();
+        _fileLock = false;
+
         return "";
     }
 
@@ -32,6 +36,34 @@ String FileServiceClass::openFile(String path)
     _fileLock = false;
 
     return result;
+}
+
+bool FileServiceClass::fileExists(String path)
+{
+    while (_fileLock)
+    {
+    }
+
+    _fileLock = true;
+
+    File file = _fs.open(path, "r");
+
+    if (!file || file.size() == 0)
+    {
+        Serial.println(path);
+        Serial.println(F("Failed to read file - FS error or file missing."));
+
+         file.close();
+        _fileLock = false;
+
+        return false;
+    }
+
+    file.close();
+    
+    _fileLock = false;
+
+    return true;
 }
 
 void FileServiceClass::saveFile(String path, String content)

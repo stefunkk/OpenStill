@@ -18,6 +18,7 @@
 #include "StillControllerTask.h"
 #include "NotificationTask.h"
 #include "WifiServer.h"
+#include "FlashDataHelper.h"
 
 // // DS18B20 sensor settings
 const uint8_t sensorPin = GPIO_NUM_15;
@@ -79,6 +80,7 @@ void setup()
 		WaterName);
 
 	auto *fileService = new FileServiceClass();
+
 	auto *configurationService = new ConfigurationServiceClass(*fileService, *context, *settings);
 	configurationService->loadConfiguration();
 
@@ -109,8 +111,13 @@ void setup()
 	}
 	else
 	{
-		Serial.print("Connecting to WiFi");
+
 		wifiClass->connectToWifi();
+		
+		if (!fileService->fileExists("/index.html"))
+		{
+			FlashDataHelperClass::downloadContentFiles(*fileService);
+		}
 	}
 
 	taskManager.registerEvent(lcdTask);
