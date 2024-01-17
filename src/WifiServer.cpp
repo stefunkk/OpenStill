@@ -77,29 +77,30 @@ void WifiServerClass::configurePages()
     sprintf(data, "{ "
                   "\"shelf10\": %.02f, \"header\": %.02f, \"tank\": %.02f, \"water\": %.02f, \"heater\": %i, "
                   "\"tankAbw\": %.02f, \"headerAbv\": %.02f1, "
-                  "\"heater2\": %i, \"heater3\": %i"
+                  "\"heater2\": %i, \"heater3\": %i, \"weight\": %.02f, \"flowRate\": %.02f"
                   "}",
             _sensorData.shelf10, _sensorData.header, _sensorData.tank, _sensorData.water, _settings.percentagePower,
             AlcoholCalculatorClass::calculateAlcoholVolumeByWashBoilingTemperature(_sensorData.tank, _settings.tankSize), AlcoholCalculatorClass::calculateAbvByHeadVapourTemperature(_sensorData.header),
-            _settings.heater2State, _settings.heater3State);
+            _settings.heater2State, _settings.heater3State, _context.weight, _context.flowRate);
+
     request->send(200, "application/json", data);
   });
 
   _server.on("/limitsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
-                  "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i "
+                  "\"shelf10TemperatureLimit\": %i, \"headerTemperatureLimit\": %i, \"tankTemperatureLimit\": %i, \"waterTemperatureLimit\": %i, \"scaleWeightNotification\": %i "
                   "}",
-            _settings.shelf10TemperatureLimit, _settings.headerTemperatureLimit, _settings.tankTemperatureLimit, _settings.waterTemperatureLimit);
+            _settings.shelf10TemperatureLimit, _settings.headerTemperatureLimit, _settings.tankTemperatureLimit, _settings.waterTemperatureLimit, _settings.scaleWeightNotification);
     request->send(200, "application/json", data);
   });
 
   _server.on("/notificationsData", HTTP_GET, [this](AsyncWebServerRequest *request) {
     char data[1000];
     sprintf(data, "{ "
-                  "\"shelf10TemperatureNotification\": %i, \"headerTemperatureNotification\": %i, \"tankTemperatureNotification\": %i, \"waterTemperatureNotification\": %i "
+                  "\"shelf10TemperatureNotification\": %i, \"headerTemperatureNotification\": %i, \"tankTemperatureNotification\": %i, \"waterTemperatureNotification\": %i, \"scaleWeightNotification\": %i "
                   "}",
-            _settings.shelf10TemperatureNotification, _settings.headerTemperatureNotification, _settings.tankTemperatureNotification, _settings.waterTemperatureNotification);
+            _settings.shelf10TemperatureNotification, _settings.headerTemperatureNotification, _settings.tankTemperatureNotification, _settings.waterTemperatureNotification, _settings.scaleWeightNotification);
     request->send(200, "application/json", data);
   });
 
@@ -108,11 +109,11 @@ void WifiServerClass::configurePages()
     sprintf(data, "{ "
                   "\"tankSize\": %i, \"csvTimeFrameInSeconds\": %i, \"pushNotificationCode\": \"%s\","
                   "\"tempOfTheDayDeviation\": %.02f, \"tempOfTheDayNotificationDelayInSeconds\": %i, \"tempOfTheDay\": %.02f,"
-                  "\"wifiSsid\": \"%s\", \"wifiPassword\": \"%s\""
+                  "\"wifiSsid\": \"%s\", \"wifiPassword\": \"%s\", \"scaleOffset\": \"%.02f\""
                   "}",
             _settings.tankSize, _settings.csvTimeFrameInSeconds, _settings.pushNotificationCode,
             _context.tempOfTheDayDeviation, _context.tempOfTheDayNotificationDelayInSeconds, _context.tempOfTheDay,
-            _settings.wifiSsid.c_str(), _settings.wifiPassword.c_str());
+            _settings.wifiSsid.c_str(), _settings.wifiPassword.c_str(), _settings.scaleOffset);
     request->send(200, "application/json", data);
   });
 
@@ -166,6 +167,12 @@ void WifiServerClass::configureInputs()
 
   _server.on("/notificationTest", HTTP_GET, [this](AsyncWebServerRequest *request) {
     NotificationHelperClass::addNotification(_context, "OpenStill", "Testowe powiadomienie");
+    request->send(200, "text/html");
+  });
+
+  
+  _server.on("/tareScale", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    _context.shouldTare = true;
     request->send(200, "text/html");
   });
 
@@ -250,6 +257,12 @@ void WifiServerClass::configureInputs()
       _settings.waterTemperatureNotification = temperatureNotification;
       _context.waterTemperatureNotificationSent = false;
     }
+    if (request->hasParam(_scaleWeightNotification))
+    {
+      int weightLimit = request->getParam(_scaleWeightNotification)->value().toInt();
+      _settings.scaleWeightNotification = weightLimit;
+      _context.scaleWeightNotificationSent = false;
+    }
 
     _configurationService.saveConfiguration();
 
@@ -321,6 +334,16 @@ void WifiServerClass::configureInputs()
     {
       auto wifiPassword = request->getParam(_wifiPassword)->value();
       _settings.wifiPassword = wifiPassword;
+    }
+    if (request->hasParam(_scaleOffset))
+    {
+      auto scaleOffset = request->getParam(_scaleOffset)->value().toDouble();
+      
+      Serial.println("Setting scale offset: ");
+      Serial.println(scaleOffset);
+
+      _settings.scaleOffset = scaleOffset;
+      _context.scaleOffsetChanged = true;
     }
 
     _configurationService.saveConfiguration();

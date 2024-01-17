@@ -19,6 +19,8 @@
 #include "NotificationTask.h"
 #include "WifiServer.h"
 #include "FlashDataHelper.h"
+#include <HX711.h>
+#include "ScaleTask.h"
 
 // // DS18B20 sensor settings
 const uint8_t sensorPin = GPIO_NUM_23;
@@ -29,6 +31,10 @@ const bool saveCsv = true;
 const uint8_t Heater1 = GPIO_NUM_19;
 const uint8_t Heater2 = GPIO_NUM_18;
 const uint8_t Heater3 = GPIO_NUM_5;
+
+// Scale pins
+const uint8_t ScaleDoutPin = GPIO_NUM_26;
+const uint8_t ScaleSckPin = GPIO_NUM_25;
 
 const int powerResolutions = 100;
 const int powerPercentage = 0;
@@ -51,6 +57,8 @@ DeviceAddress WaterAddress = {0x28, 0xFF, 0xB7, 0x78, 0x90, 0x17, 0x05, 0x77};
 
 auto server = new AsyncWebServer(80);
 
+const double SCALE_OFFSET = -1902;
+
 void setup()
 {
 
@@ -68,6 +76,8 @@ void setup()
 	settings->heaterTimeFrameInSeconds = heaterTimeFrameInSeconds;
 	settings->csvTimeFrameInSeconds = csvTimeFrameInSeconds;
 	settings->saveCsv = saveCsv;
+	settings->doutPin = ScaleDoutPin;
+	settings->sckPin = ScaleSckPin;
 
 	auto *context = new StillDataContextClass(
 		shelf10Address,
@@ -78,6 +88,10 @@ void setup()
 		HeadName,
 		TankName,
 		WaterName);
+
+		
+	auto *scale = new HX711();
+	static auto *scaleTask = new ScaleTaskClass(*context, *scale, *settings);
 
 	auto *fileService = new FileServiceClass();
 
@@ -120,6 +134,7 @@ void setup()
 		}
 	}
 
+	taskManager.registerEvent(scaleTask);
 	taskManager.registerEvent(lcdTask);
 	taskManager.registerEvent(sensorTask);
 	taskManager.registerEvent(heaterTask);

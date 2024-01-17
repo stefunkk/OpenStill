@@ -38,6 +38,12 @@ public:
     int waterTemperatureNotification = 999;
 
     bool saveCsv = false;
+
+    double scaleOffset = 0;
+    int scaleWeightNotification = 0;
+
+    int sckPin = 0;
+    int doutPin = 0;
 };
 
 #endif // __SETTINGS_H__

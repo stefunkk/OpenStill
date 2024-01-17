@@ -264,6 +264,25 @@
                 </div>
             </div>
 
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card-deck mb-12 text-center">
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">{{ $t("weight") }}</h4>
+                            </div>
+                            <div class="card-body">
+                                <h1 class="card-title pricing-card-title">{{ weight }} <small
+                                        class="text-muted">g</small>
+                                </h1>
+                                <h3 class="pricing-card-title">( {{ flowRate }} <small class="text-muted">g/min </small>)
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
 
             <div>
@@ -456,6 +475,17 @@
                                                     v-on:click="setWaterTemperatureNotification">{{ $t("set") }}</button>
                                             </div>
                                         </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">{{ $t("scaleWeightNotification") }} (g)</span>
+                                            </div>
+                                            <input class="form-control" v-model="scaleWeightNotification" type="number"
+                                                step="1">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    v-on:click="setscaleWeightNotification">{{ $t("set") }}</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -590,6 +620,23 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div class="input-group col-md-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">{{ $t("scaleOffset") }}</span>
+                                        </div>
+                                        <input class="form-control" v-model="scaleOffset" type="text">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                v-on:click="updateScaleOffset">{{ $t("set") }}</button>
+                                        </div>
+                                        <div class="ml-2">
+                                            <button class="btn btn-secondary" type="button"
+                                                v-on:click="tareScale">{{ $t("tare") }}</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -614,7 +661,7 @@
             locale: 'pl',
             messages: {
                 en: {
-                    language: 'Language',
+                    language: 'Język',
                     shelf: 'Shelf (10)',
                     header: 'Header',
                     tank: 'Tank',
@@ -637,10 +684,14 @@
                     csvTimeFrame: "CSV time frame (s)",
                     wifiSsid: "Wifi SSID",
                     on: "On",
-                    off: "Off"
+                    off: "Off",
+                    scaleOffset: "Scale offset",
+                    scaleWeightNotification: "Weight",
+                    tare: "Tare",
+                    weight: "Weight"
                 },
                 pl: {
-                    language: 'Język',
+                    language: 'Language',
                     shelf: 'Półka (10)',
                     header: 'Głowica',
                     tank: 'Zbiornik',
@@ -663,7 +714,11 @@
                     csvTimeFrame: "Częstotliwość CSV (s)",
                     wifiSsid: "Wifi nazwa",
                     on: "On",
-                    off: "Off"
+                    off: "Off",
+                    scaleOffset: "Współczynnik wagi",
+                    scaleWeightNotification: "Waga",
+                    tare: "Taruj",
+                    weight: "Waga"
                 }
             }
         })
@@ -770,11 +825,11 @@
                 wifiSsid: "",
                 wifiPassword: "",
                 heater2State: false,
-                heater3State: false
-
-
-
-
+                heater3State: false,
+                scaleOffset: 0.0,
+                scaleWeightNotification: 0,
+                weight: 0,
+                flowRate: 0
             },
             mounted: function () {
                 this.interval = setInterval(() => {
@@ -791,6 +846,8 @@
                             this.headerAbv = response.data.headerAbv;
                             this.heater2State = response.data.heater2 > 0 ? true : false;
                             this.heater3State = response.data.heater3 > 0 ? true : false;
+                            this.weight =  Math.round(response.data.weight);
+                            this.flowRate =  response.data.flowRate;
 
                             if (!this.setHeater) {
                                 this.setHeater = this.heater
@@ -843,6 +900,14 @@
                 this.refreshNotifications();
             },
             methods: {
+                updateScaleOffset: function (event) {
+                    axios
+                        .get('/set', {
+                            params: {
+                                scaleOffset: this.scaleOffset
+                            }
+                        })
+                },
                 updateHeater: function (event) {
                     axios
                         .get('/set', {
@@ -950,6 +1015,14 @@
                             }
                         })
                 },
+                setscaleWeightNotification: function (event) {
+                    axios
+                        .get('/setLimits', {
+                            params: {
+                                scaleWeightNotification: this.scaleWeightNotification
+                            }
+                        })
+                },
                 setHeaderTemperatureLimit: function (event) {
                     axios
                         .get('/setLimits', {
@@ -1031,6 +1104,7 @@
                             this.headerTemperatureNotification = response.data.headerTemperatureNotification;
                             this.tankTemperatureNotification = response.data.tankTemperatureNotification;
                             this.waterTemperatureNotification = response.data.waterTemperatureNotification;
+                            this.scaleWeightNotification = response.data.scaleWeightNotification;
                         });
                 },
                 refreshOtherConfiguration: function (event) {
@@ -1047,11 +1121,17 @@
 
                             this.wifiSsid = response.data.wifiSsid;
                             this.wifiPassword = response.data.wifiPassword;
+
+                            this.scaleOffset = response.data.scaleOffset;
                         });
                 },
                 testPushNotificationCode: function (event) {
                     axios
                         .get('/notificationTest');
+                },
+                tareScale: function (event) {
+                    axios
+                        .get('/tareScale');
                 },
                 clearCsv: function (event) {
                     if (confirm("Na pewno chcesz wyzerować plik?")) {

@@ -41,6 +41,8 @@ private:
 	
 	const char *_wifiSsid = "wifiSsid";
 	const char *_wifiPassword = "wifiPassword";
+	
+	const char *_scaleOffset = "scaleOffset";
 
 	const char *_pushNotificationCode = "pushNotificationCode";
 
@@ -53,6 +55,8 @@ private:
 	const char *_headerTemperatureLimit = "headerTemperatureLimit";
 	const char *_tankTemperatureLimit = "tankTemperatureLimit";
 	const char *_waterTemperatureLimit = "waterTemperatureLimit";
+
+	const char *_scaleWeightNotification = "scaleWeightNotification";
 
 	const char *_shelf10TemperatureNotification = "shelf10TemperatureNotification";
 	const char *_headerTemperatureNotification = "headerTemperatureNotification";

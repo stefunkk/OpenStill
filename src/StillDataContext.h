@@ -33,9 +33,16 @@ public:
     bool headerTemperatureNotificationSent = false;
     bool tankTemperatureNotificationSent = false;
     bool waterTemperatureNotificationSent = false;
+    bool scaleWeightNotificationSent = false;
 
     String ipAddress = "";
     bool isIpShown = false;
+
+    double weight = 0;
+    bool shouldTare = true;
+    bool scaleOffsetChanged = false;
+
+    double flowRate = 0;
 };
 
 

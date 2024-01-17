@@ -59,6 +59,11 @@ void StillControllerTaskClass::checkTempNotifications()
 		NotificationHelperClass::addNotification(_context, "OpenStill", "Temperatura wody (" + String(_settings.waterTemperatureNotification)  + "*C) osiągnięta.");
 		_context.waterTemperatureNotificationSent = true;
 	}
+	if (_context.weight > _settings.scaleWeightNotification && !_context.scaleWeightNotificationSent)
+	{
+		NotificationHelperClass::addNotification(_context, "OpenStill", "Waga (" + String(_settings.scaleWeightNotification)  + "g) została osiągnięta.");
+		_context.scaleWeightNotificationSent = true;
+	}
 }
 
 void StillControllerTaskClass::checkTempOfTheDay()
