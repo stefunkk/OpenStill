@@ -91,6 +91,8 @@ void LcdServiceClass::printExtraData(const double temperatures[4]) const
 {
 	printHeadAbv(temperatures[1]);
 	printTankAlcoholLeft(temperatures[2]);
+	printFlowRateWeight(_context.flowRate);
+	printWeight(_context.weight);
 }
 
 void LcdServiceClass::printHeadAbv(float temperature) const
@@ -109,6 +111,24 @@ void LcdServiceClass::printHeadAbv(float temperature) const
 		_lcd.print("      ");
 	}
 }
+
+void LcdServiceClass::printWeight(double weight) const
+{
+	_lcd.setCursor(14, _weightIndex);
+
+	_lcd.printf("%5.1i", int(weight)%99999);
+	_lcd.print("g");
+
+}
+
+void LcdServiceClass::printFlowRateWeight(double flowRate) const
+{
+	_lcd.setCursor(14, _flowRateIndex);
+
+	_lcd.printf("%5.1i", int(flowRate)%99999);
+	_lcd.write(4);
+}
+
 
 void LcdServiceClass::printTankAlcoholLeft(float temperature) const
 {
@@ -170,8 +190,19 @@ void LcdServiceClass::createCustomCharacters() const
 		0b11000,
 		0b11000};
 
+	byte gm[8] = {
+		B11000,
+		B11001,
+		B01010,
+		B11100,
+		B01000,
+		B10111,
+		B00111,
+		B00101};
+
 	_lcd.createCharPgm(0, arrowUp);
 	_lcd.createCharPgm(1, arrowDown);
 	_lcd.createCharPgm(2, tank);
 	_lcd.createCharPgm(3, head);
+	_lcd.createCharPgm(4, gm);
 }

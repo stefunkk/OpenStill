@@ -57,7 +57,6 @@ void SensorTaskClass::exec()
 
 	_sensors.requestTemperatures();
 
-
 	_sensorData.shelf10 = _sensors.getTempC(_context.shelf10Address);
 	_sensorData.header = _sensors.getTempC(_context.headAddress);
 	_sensorData.tank = _sensors.getTempC(_context.tankAddress);

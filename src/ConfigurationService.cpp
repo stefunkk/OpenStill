@@ -38,8 +38,12 @@ void ConfigurationServiceClass::loadConfiguration()
     _settings.tankTemperatureNotification = doc["tankTemperatureNotification"];
     _settings.waterTemperatureNotification = doc["waterTemperatureNotification"];
 
+    _settings.scaleWeightNotification = doc["scaleWeightNotification"];
+
     _settings.wifiSsid = doc["wifiSsid"].as<String>();
     _settings.wifiPassword = doc["wifiPassword"].as<String>();
+
+    _settings.scaleOffset = doc["scaleOffset"];
 
     strlcpy(_settings.pushNotificationCode, doc["pushNotificationCode"], sizeof(_settings.pushNotificationCode));
 
@@ -79,8 +83,12 @@ void ConfigurationServiceClass::saveConfiguration()
     doc["tankTemperatureNotification"] = _settings.tankTemperatureNotification;
     doc["waterTemperatureNotification"] = _settings.waterTemperatureNotification;
 
+    doc["scaleWeightNotification"] = _settings.scaleWeightNotification;
+
     doc["wifiSsid"] = _settings.wifiSsid;
     doc["wifiPassword"] = _settings.wifiPassword;
+
+    doc["scaleOffset"] = _settings.scaleOffset;
 
     JsonArray shelf10Data = doc.createNestedArray("shelf10Address");
     writeArray(shelf10Data, _context.shelf10Address);

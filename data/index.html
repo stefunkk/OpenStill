@@ -847,7 +847,7 @@
                             this.heater2State = response.data.heater2 > 0 ? true : false;
                             this.heater3State = response.data.heater3 > 0 ? true : false;
                             this.weight =  Math.round(response.data.weight);
-                            this.flowRate =  response.data.flowRate;
+                            this.flowRate =  Math.round(response.data.flowRate);
 
                             if (!this.setHeater) {
                                 this.setHeater = this.heater

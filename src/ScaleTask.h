@@ -20,11 +20,11 @@ private:
 	SettingsClass &_settings;
 
 	unsigned long lastWeightReadingTime = 0;
-	unsigned long lastWeightReading = 0;
+	double lastWeightReading = 0;
 	unsigned long flowRateDelay = 10000;
 
 	void FindSensors();
-	void CalculateFlowRate(double weight);
+	void CalculateFlowRate(double weight, unsigned long readingTime);
 };
 
 #endif

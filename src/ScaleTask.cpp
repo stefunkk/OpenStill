@@ -22,18 +22,24 @@ uint32_t ScaleTaskClass::timeOfNextCheck()
 	return millisToMicros(200);
 }
 
-void ScaleTaskClass::CalculateFlowRate(double weight)
+void ScaleTaskClass::CalculateFlowRate(double weight, unsigned long readingTime)
 {
 	if (lastWeightReadingTime == 0)
 	{
-		lastWeightReadingTime = millis();
+		lastWeightReadingTime = readingTime;
 		lastWeightReading = weight;
 	}
 
-	auto timePassed = millis() - lastWeightReadingTime;
+	auto timePassed = readingTime - lastWeightReadingTime;
 	if (timePassed > flowRateDelay)
 	{
+		Serial.println("time passed change: ");
+		Serial.print(timePassed);
+		
 		auto weightChange = weight - lastWeightReading;
+		Serial.println("Weight change: ");
+		Serial.print(weightChange);
+
 		_context.flowRate = weightChange * 60000 / timePassed;
 	}
 	else 
@@ -41,7 +47,7 @@ void ScaleTaskClass::CalculateFlowRate(double weight)
 		return;
 	}
 
-	lastWeightReadingTime = millis();
+	lastWeightReadingTime = readingTime;
 	lastWeightReading = weight;
 }
 
@@ -67,6 +73,6 @@ void ScaleTaskClass::exec()
 	if (_scale.wait_ready_timeout(200))
 	{
 		_context.weight = _scale.get_units(5);
-		CalculateFlowRate(_context.weight);
+		CalculateFlowRate(_context.weight, millis());
 	}
 }

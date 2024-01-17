@@ -21,9 +21,13 @@ private:
 	void printHeadAbv(float temperature) const;
 	void printTankAlcoholLeft(float temperature) const;
 	auto printExtraData(const double temperatures[4]) const -> void;
+	auto printWeight(const double weight) const -> void;
+	auto printFlowRateWeight(double flowRate) const -> void;
 	LiquidCrystal &_lcd;
-	int _tankIndex = 2;
-	int _headIndex = 1;
+	int _tankIndex = 1;
+	int _headIndex = 0;
+	int _weightIndex = 2;
+	int _flowRateIndex = 3;
 	AlcoholCalculatorClass &_alcoholCalculator;
 	float _tankSize;
 	float _temperatures[4];
