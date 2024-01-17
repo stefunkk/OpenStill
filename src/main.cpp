@@ -89,14 +89,13 @@ void setup()
 		TankName,
 		WaterName);
 
-		
-	auto *scale = new HX711();
-	static auto *scaleTask = new ScaleTaskClass(*context, *scale, *settings);
-
 	auto *fileService = new FileServiceClass();
 
 	auto *configurationService = new ConfigurationServiceClass(*fileService, *context, *settings);
 	configurationService->loadConfiguration();
+
+	auto *scale = new HX711();
+	static auto *scaleTask = new ScaleTaskClass(*context, *scale, *settings);
 
 	static auto *heaterTask = new HeaterTaskClass(*settings);
 
