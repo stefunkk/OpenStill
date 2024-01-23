@@ -25,9 +25,9 @@ uint32_t NotificationTaskClass::timeOfNextCheck()
 
 void NotificationTaskClass::sendNotification(String title, String message)
 {
-  const char *host = "pushme.vercel.app";
+  const char *host = "www.pushsafer.com";
   const uint16_t port = 443;
-  String path = "/api/sendNotification";
+  String path = "/api";
   Serial.println("Sending notification: " + message);
 
   WiFiClientSecure client;
@@ -38,8 +38,8 @@ void NotificationTaskClass::sendNotification(String title, String message)
 
   if (https.begin(client, host, port, path))
   {
-    https.addHeader("Content-Type", "application/json");
-    int httpsCode = https.POST("{\"code\":\"" + String(_settings.pushNotificationCode) + "\",\"title\":\"" + title + "\",\"message\":\"" + message + "\"}");
+    https.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    int httpsCode = https.POST("k=" + String(_settings.pushNotificationCode) + "&t=" + title + "&m=" + message + "&d=a&u=http://" + _context.ipAddress);
 
     if (httpsCode > 0)
     {

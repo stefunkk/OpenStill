@@ -33,12 +33,7 @@ void ScaleTaskClass::CalculateFlowRate(double weight, unsigned long readingTime)
 	auto timePassed = readingTime - lastWeightReadingTime;
 	if (timePassed > flowRateDelay)
 	{
-		Serial.println("time passed change: ");
-		Serial.print(timePassed);
-		
 		auto weightChange = weight - lastWeightReading;
-		Serial.println("Weight change: ");
-		Serial.print(weightChange);
 
 		_context.flowRate = weightChange * 60000 / timePassed;
 	}
