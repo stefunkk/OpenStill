@@ -2,18 +2,18 @@
 
 SensorTaskClass::SensorTaskClass(OneWire &oneWire, DallasTemperature &sensors, StillDataContextClass &context, SensorDataClass &sensorData) : _sensors(sensors), _sensorData(sensorData), _oneWire(oneWire), _context(context)
 {
-	_sensors.setResolution(12);
 	_sensors.begin();
 
 	_deviceCount = _sensors.getDeviceCount();
 	FindSensors();
+	_sensors.setResolution(12);
 }
 
 uint32_t SensorTaskClass::timeOfNextCheck()
 {
 	setTriggered(true);
 
-	return millisToMicros(1000);
+	return millisToMicros(1500);
 }
 
 void SensorTaskClass::FindSensors()
@@ -57,8 +57,33 @@ void SensorTaskClass::exec()
 
 	_sensors.requestTemperatures();
 
-	_sensorData.shelf10 = _sensors.getTempC(_context.shelf10Address);
-	_sensorData.header = _sensors.getTempC(_context.headAddress);
-	_sensorData.tank = _sensors.getTempC(_context.tankAddress);
-	_sensorData.water = _sensors.getTempC(_context.waterAddress);
+	double reading = -127;
+	reading = _sensors.getTempC(_context.shelf10Address);
+
+	if (reading != -127) {
+
+		_sensorData.shelf10 = reading;
+	}
+
+	reading = _sensors.getTempC(_context.headAddress);
+
+	if (reading != -127) {
+
+		_sensorData.header = reading;
+	}
+
+	reading = _sensors.getTempC(_context.tankAddress);
+
+	if (reading != -127) {
+
+		_sensorData.tank = reading;
+	}
+	
+	reading = _sensors.getTempC(_context.waterAddress);
+
+	if (reading != -127) {
+
+		_sensorData.water = reading;
+	}
 }
+
