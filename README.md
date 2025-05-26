@@ -1,6 +1,6 @@
 # OpenStill
 
-Project for controlling still. Developed for ESP8266.
+Project for controlling still. Developed for ESP32.
 
 
 ## Functions
@@ -26,10 +26,10 @@ Project for controlling still. Developed for ESP8266.
 
 ## Hardware
 
-* Project is developed on WeMos ESP8266 v3 (also checked on NodeMCU v3)
+* Project is developed on ESP32
 * 4 sensors DS18B20 in parasite mode connected to pin D7 with 4.7K resistor
 * SSR connected to D4
-* I2C 20x4 LCD - [how to connect](https://www.google.com/search?q=i2c+lcd+esp8266&tbm=isch)
+* I2C 20x4 LCD - [how to connect](https://www.google.com/search?q=i2c+lcd+esp32&tbm=isch)
 
 ## Dependencies
 
@@ -47,34 +47,5 @@ Project for controlling still. Developed for ESP8266.
 
 ![Screen shot](https://i.ibb.co/StTxN0J/termo.png)
 
-## Installation
-
-Download ESP flash download tool:
-
-https://www.espressif.com/sites/default/files/tools/flash_download_tool_v3.8.5.zip
-
-Download bin files:
-
-https://github.com/stefunkk/OpenStill/releases/download/0.9-rc/spiffs.bin
-https://github.com/stefunkk/OpenStill/releases/download/0.9-rc/firmware.bin
-
-Choose SPI Mode - DOUT
-
-Add firmware.bin with address 0x00000
-Add spiffs.bin with address 0x00300000 (unsure if that's the address for all devices, or just for mine NodeMCU ESP8266 12-E v3 4mb flash)
-
-Flash
-
-Restart
-
-Connect with OpenStill wifi, update wifi settings, restart device.
-
-Done
-
-## Notification configuration
-
-Get the code from https://pushme.now.sh/
-
-Go to "Others" tab, input Notifications code and click "Set" and then "Test" to see if it works
 
 
